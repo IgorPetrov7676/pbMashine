@@ -1,0 +1,25 @@
+﻿/*
+ * errors.h
+ *
+ * Created: 03.07.2023 14:04:19
+ *  Author: Игорь
+ */ 
+
+
+#ifndef ERRORS_H_
+#define ERRORS_H_
+
+typedef enum{
+	ERROR_NO_ERROR = 0,
+	ERROR_ERROR_CRC,
+	ERROR_UNCKNOW_MESSAGE_TYPE,
+	ERROR_WRONG_FIRST_BYTE,
+	ERROR_OUT_OF_WORKPLACE_X,
+	ERROR_OUT_OF_WORKPLACE_Y,
+	ERROR_OUT_OF_WORKPLACE_Z,
+	ERROR_UNKNOW_ERROR
+}error;
+
+
+
+#endif /* ERRORS_H_ */
