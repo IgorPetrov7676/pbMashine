@@ -30,7 +30,7 @@ QStringList pad::calcGCode(float penDiameter, float force, float moveSpeed, floa
             int n=1;
             float centerY=0;
             for(;n!=lines+1;n++){//рисуем концентрические окружности до заполнения PAD-а
-                centerY += n*(penDiameter/2);
+                centerY += penDiameter / 2;
                 tmpProg.append("G01 Y"+QString::number(Y + centerY) + " F" + QString::number(force) + "\n");//смещаем по Y на величину диаметра
                 tmpProg.append("G02 X0 Y0 I0 J" + QString::number(0 - centerY) + "\n");
             }
