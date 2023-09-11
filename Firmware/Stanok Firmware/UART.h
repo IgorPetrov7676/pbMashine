@@ -20,8 +20,9 @@ extern char UARTWriteEnable;
 extern error lastError;
 extern char bisy;
 extern void setupMessageQueue();
-extern int *getNewMessage();
+extern char *getNewMessage();
 extern char addMessageInQueue(char *messagePointer);
+extern void startTimer2();
 
 
 char inputBytesCounter;//счетчик входящих байт

@@ -11,13 +11,13 @@
 void setupMessageQueue(){
 	messageQueueSize = 10;
 	messageQueueCount = 0;
-	messageQueue = (int)malloc(messageQueueSize);
+	messageQueue = (int*)malloc(messageQueueSize);
 	if(messageQueue == NULL){
 		//TODO обработать ошибку
 		return;	
 	}
 	for(int n = 0; n != messageQueueSize; n++){
-		messageQueue[n] = NULL;
+		messageQueue[n] = 0;
 	}	
 }
 ////////////////////////////////////////////////////////////////////////////////////
@@ -31,9 +31,9 @@ char addMessageInQueue(char *messagePointer){
 	return 1;
 }
 ////////////////////////////////////////////////////////////////////////////////////
-int *getNewMessage(){
+char *getNewMessage(){
 	if(messageQueueCount != 0){
-		int *tmp = (void*)messageQueue[0];
+		char *tmp = (char*)messageQueue[0];
 		messageQueueCount --;
 		for(int n = 0; n != messageQueueCount; n++){//сдвиг очереди влево
 			messageQueue[n] = messageQueue[n + 1];

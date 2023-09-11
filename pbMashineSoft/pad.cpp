@@ -32,11 +32,15 @@ QStringList pad::calcGCode(float penDiameter, float force, float moveSpeed, floa
             for(;n!=lines+1;n++){//рисуем концентрические окружности до заполнения PAD-а
                 centerY += penDiameter / 2;//stt
                 tmpProg.append("G01 Y"+QString::number(Y + centerY) + " F" + QString::number(force) + "\n");//смещаем по Y на величину диаметра
+                tmpProg.append("G91\n");//временно переключаемся на относительные координаты
                 tmpProg.append("G02 X0 Y0 I0 J" + QString::number(0 - centerY) + "\n");
+                tmpProg.append("G90\n");//обратно на абсолютные координаты
             }
             if(lastLineOffset!=0){
-                tmpProg.append("G01 Y"+QString::number(Y-centerY+lastLineOffset)+"\n");//смещаем по Y на величину диаметра
-                tmpProg.append("G02 X"+QString::number(X)+" Y"+QString::number(Y-centerY+lastLineOffset)+" I0 J"+QString::number(centerY-lastLineOffset)+"\n");
+                tmpProg.append("G01 Y"+QString::number(Y + centerY + lastLineOffset) + "\n");//смещаем по Y на величину диаметра
+                tmpProg.append("G91\n");//временно переключаемся на относительные координаты
+                tmpProg.append("G02 X0 Y0 I0 J" + QString::number(0 - (centerY + lastLineOffset))+"\n");
+                tmpProg.append("G90\n");//обратно на абсолютные координаты
             }
             tmpProg.append("G00 Z"+QString::number(0)+" F"+QString::number(moveSpeed)+"\n");
             break;

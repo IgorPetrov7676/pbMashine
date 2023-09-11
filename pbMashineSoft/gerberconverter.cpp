@@ -477,6 +477,7 @@ apperture *gerberConverter::findApperture(int number){
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void gerberConverter::initGProgram(){
     currentPosInGProg=0;
+    addGCommand("G90\n");//использовать абсолютные координаты
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void gerberConverter::addGCommand(QString command){
@@ -632,6 +633,8 @@ void gerberConverter::convertCoordinates(){
             }
         }
     }
+    coordX -= 3;
+    coordY -= 3;
 
     if(padsArray != nullptr){
         foreach(pad *nextPad, *padsArray){

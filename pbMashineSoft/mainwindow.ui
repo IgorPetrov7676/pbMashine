@@ -43,7 +43,7 @@
      <font/>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -56,6 +56,21 @@
         <y>0</y>
         <width>1131</width>
         <height>421</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Сверление</string>
+     </attribute>
+     <widget class="drillWidget" name="widget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>1171</width>
+        <height>451</height>
        </rect>
       </property>
      </widget>
@@ -74,11 +89,6 @@
        </rect>
       </property>
      </widget>
-    </widget>
-    <widget class="QWidget" name="tab_3">
-     <attribute name="title">
-      <string>Сверление</string>
-     </attribute>
     </widget>
    </widget>
   </widget>
@@ -143,6 +153,12 @@
    <class>drawWidget</class>
    <extends>QWidget</extends>
    <header location="global">widgets/drawwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>drillWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/drillwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

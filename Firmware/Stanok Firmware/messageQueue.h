@@ -10,16 +10,17 @@
 #define MESSAGESQUEUE_H_
 
 #include <stddef.h>//нужен для NULL
+#include <stdlib.h>//нужен для malloc
 
 //FILO буфер очереди сообщений
 
 char messageQueueSize;
-char messageQueueCount;//счетчик сообщений в очереди
+int messageQueueCount;//счетчик сообщений в очереди
 int *messageQueue;//очередь сообщений. Массив указателей на сообщения
 
 void setupMessageQueue();
 char addMessageInQueue(char *messagePointer);//добавляет новое сообщение в очередь/ возвращает 0 если очередь переполнена
-int *getNewMessage();
+char *getNewMessage();
 
 
 
