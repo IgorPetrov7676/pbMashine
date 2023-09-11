@@ -77,8 +77,8 @@ QStringList GPath::calcGCode(float penDiameter, float force, float moveSpeed, fl
         return tmpProg;
     }
     int size=pointsArray->size();
-    tmpProg.append("G00 X"+QString::number(pointsArray->at(0)->x())+" Y"+QString::number(pointsArray->at(0)->y())+" F"+QString::number(moveSpeed)+"\n");//перемещаемся в начало пути
-    tmpProg.append("G00 Z"+QString::number(0)+" F"+QString::number(moveSpeed)+"\n");//опускаем в позицию рисования, делаем точку
+    tmpProg.append("G00 X" + QString::number(pointsArray->at(0)->x()) + " Y" + QString::number(pointsArray->at(0)->y()) + " F"+QString::number(moveSpeed) + "\n");//перемещаемся в начало пути
+    tmpProg.append("G00 Z" + QString::number(zOffset)+" F"+QString::number(moveSpeed)+"\n");//опускаем в позицию рисования, делаем точку
     for(int n=0;n!=size;n++){//строим центральную линию
         QPointF *point=pointsArray->at(n);
         float X=round(point->x()*10)/10;
@@ -105,7 +105,7 @@ QStringList GPath::calcGCode(float penDiameter, float force, float moveSpeed, fl
             tmpProg.append("G01 X"+QString::number(perPoint1.x())+" Y"+QString::number(perPoint1.y())+"\n");//смещаемся в конечную точку
         }
     }
-    tmpProg.append("G00 Z"+QString::number(zOffset)+" F"+QString::number(moveSpeed)+"\n");
+    tmpProg.append("G00 Z0 F"+QString::number(moveSpeed)+"\n");
     return tmpProg;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +133,6 @@ void GPath::convertCoordinates(float zeroX, float zeroY){
         nextPoint->setX(nextPoint->x() - zeroX);
         nextPoint->setY(nextPoint->y() - zeroY);
     }
-
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 float GPath::getMinY(){

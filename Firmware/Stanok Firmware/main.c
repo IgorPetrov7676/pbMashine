@@ -45,21 +45,34 @@ int main(void)
 	*/
 	
 	
-	/*inputDataArraySize = 20;
+	/*inputDataArraySize = 17;
 	inputDataArray = (char*)malloc(inputDataArraySize);
 
-	inputDataArray[0] = 20;
+	inputDataArray[0] = 17;
 	inputDataArray[1] = 1;
 	inputDataArray[2] = 71;
 	inputDataArray[3] = 48;
-	inputDataArray[4] = 50;
+	inputDataArray[4] = 49;
 	inputDataArray[5] = 32;
 	inputDataArray[6] = 88;
-	inputDataArray[7] = 52;
-	inputDataArray[8] = 48;
-	inputDataArray[9] = 32;
-	inputDataArray[10] = 73;
-	inputDataArray[11] = 50;
+	inputDataArray[7] = 56;
+	inputDataArray[8] = 46;
+	inputDataArray[9] = 53;
+	inputDataArray[10] = 32;
+	inputDataArray[11] = 89;
+	inputDataArray[12] = 49;
+	inputDataArray[13] = 52;
+	inputDataArray[14] = 10;
+	inputDataArray[15] = 164;
+	inputDataArray[16] = 91;
+	*/
+	//inputDataArray[17] = 67;
+	//inputDataArray[18] = 193;
+	
+	//inputDataArray[19] = 117;
+	//inputDataArray[20] = 158;
+	
+	/*inputDataArray[11] = 50;
 	inputDataArray[12] = 48;
 	inputDataArray[13] = 32;
 	inputDataArray[14] = 70;
@@ -128,14 +141,14 @@ void setup(){
 }
 ////////////////////////////////////////////////////////
 void checkStopSwitches(){
-	if(! (PINC & (1 << PORTC2))){
+	if(! (PINC & (1 << PORTC3))){
 		swX = 1;
 	}
 	else{
 		swX = 0;
 	}
 	
-	if(! (PINC & (1 << PORTC3))){
+	if(! (PINC & (1 << PORTC2))){
 		swY = 1;
 	}
 	else{

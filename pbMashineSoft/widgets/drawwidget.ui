@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1191</width>
-    <height>471</height>
+    <height>485</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,23 +39,23 @@
      <x>170</x>
      <y>390</y>
      <width>811</width>
-     <height>71</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="title">
-    <string>Настройки</string>
+    <string>Настройкиxx</string>
    </property>
    <widget class="QDoubleSpinBox" name="zPosSpinBox">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>30</y>
-      <width>61</width>
+      <x>10</x>
+      <y>50</y>
+      <width>111</width>
       <height>26</height>
      </rect>
     </property>
     <property name="maximum">
-     <double>10.000000000000000</double>
+     <double>1000.000000000000000</double>
     </property>
     <property name="value">
      <double>2.000000000000000</double>
@@ -65,7 +65,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>35</y>
+      <y>31</y>
       <width>121</width>
       <height>17</height>
      </rect>
@@ -78,7 +78,7 @@
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>35</y>
+      <y>31</y>
       <width>101</width>
       <height>17</height>
      </rect>
@@ -90,9 +90,9 @@
    <widget class="QDoubleSpinBox" name="penSizeSpinBox">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>30</y>
-      <width>61</width>
+      <x>170</x>
+      <y>50</y>
+      <width>91</width>
       <height>26</height>
      </rect>
     </property>
@@ -104,7 +104,7 @@
     <property name="geometry">
      <rect>
       <x>700</x>
-      <y>30</y>
+      <y>50</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -117,7 +117,7 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>35</y>
+      <y>31</y>
       <width>101</width>
       <height>17</height>
      </rect>
@@ -129,9 +129,9 @@
    <widget class="QDoubleSpinBox" name="forceSpinBox">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>30</y>
-      <width>61</width>
+      <x>310</x>
+      <y>50</y>
+      <width>101</width>
       <height>26</height>
      </rect>
     </property>
@@ -142,9 +142,9 @@
    <widget class="QDoubleSpinBox" name="moveSpinBox">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>30</y>
-      <width>61</width>
+      <x>440</x>
+      <y>50</y>
+      <width>191</width>
       <height>26</height>
      </rect>
     </property>
@@ -155,16 +155,14 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>35</y>
-      <width>131</width>
+      <x>440</x>
+      <y>31</y>
+      <width>191</width>
       <height>17</height>
      </rect>
     </property>
     <property name="font">
-     <font>
-      <family>Serif</family>
-     </font>
+     <font/>
     </property>
     <property name="text">
      <string>Скорость перемещения</string>

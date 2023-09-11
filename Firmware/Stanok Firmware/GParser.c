@@ -98,9 +98,6 @@ void parseGCode(const char *array, char len){
 		command.J = (float)(atof(pos + 1) * 10);
 		command.reliability |= (1 << 6);
 	}
-	
-	
-
 	startExecuteCommand(command);
 }
 ////////////////////////////////////////////////////////////////////////
@@ -116,7 +113,6 @@ void parseMCode(unsigned char *array, char len){
 		return;
 	}
 	
-	
 	switch(command){
 		case(18):{//отключить двигатели
 			disableSteppers();
@@ -128,6 +124,11 @@ void parseMCode(unsigned char *array, char len){
 		}
 		case(50):{//установить текущие координаты как программные концевики
 			setUserEndPos();
+			break;
+		}
+		case(51):{//сбросить текущие программные концевики в значения по умолчанию
+			resetUserEndPos();
+			break;
 		}
 	}
 }

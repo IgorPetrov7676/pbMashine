@@ -10,7 +10,7 @@
 #include <QVector>
 #include <QRectF>
 #include <cmath>
-#include "mashineobject.h"
+#include "mashineObject.h"
 #include "widgets/progressdialor.h"
 #include "apperture.h"
 #include "pad.h"

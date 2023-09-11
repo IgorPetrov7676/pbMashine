@@ -1,4 +1,4 @@
-#include "mashineobject.h"
+#include "mashineObject.h"
 
 mashineObject::mashineObject(QWidget *parent)
 {

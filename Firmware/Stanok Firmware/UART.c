@@ -194,7 +194,7 @@ void clearDiagnosticArray(){
 }
 ///////////////////////////////////////////////////////////////////////////
 void writeArray(){
-	UARTWriteEnable = 0;
+	//UARTWriteEnable = 0;
 	if(outputDataArray == NULL){
 		outputDataArray = getNewMessage();
 		if(outputDataArray == NULL){
@@ -212,13 +212,13 @@ void writeArray(){
 			UARTToRead();	
 		}
 		else{
-			UARTWriteEnable = 1;//запускаем следующее
+			UARTWriteEnable = 1;
+			//startTimer2(30);//задержка в 1 мС между пакетами. иначе при коротких командах приложение принимает две за одну
 		}
 	}
 }
 ////////////////////////////////////////////////////////////////////////////
 void UARTToWrite(){
-	outputBytesCounter = 0;
 	UCSR0B &= ~(1 << RXEN0);//запрет приема
 	UCSR0B |= (1 << TXEN0);//разрешение передачи
 	UCSR0B |= (1 << TXCIE0);//разрешаем прерывание по передаче
@@ -241,7 +241,7 @@ void sendCommandComleteMessage(){
 //////////////////////////////////////////////////////////////////////////////
 void distributeShortMessage(messageType message){
 	char size = 4;//размер: размер(1) + тип пакета(1) + CRC(2)
-	clearOutputArray();
+	//clearOutputArray();
 	char *tmpArray = (char*)malloc((int)size);
 	if(tmpArray == NULL){
 		//TODO обработать ошибку
