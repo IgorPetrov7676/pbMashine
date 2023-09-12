@@ -84,7 +84,8 @@ void MainWindow::openSlot(QString fileType){
     QFileDialog dialog(this);
     dialog.setViewMode(QFileDialog::Detail);
     dialog.setNameFilter(fileType);
-    dialog.setDirectory(readConfigParameter("lastPath"));//получаем последний использованный путь из .conf файла
+    QString lastPath = readConfigParameter("lastPath");
+    dialog.setDirectory(lastPath);//получаем последний использованный путь из .conf файла
     if(dialog.exec() == QDialog::Accepted){
         QString fileName=dialog.selectedFiles().at(0);
         if(!fileName.isEmpty()){
@@ -148,8 +149,13 @@ void MainWindow::writeConfigParameter(QString parameter, QString value){
         QByteArray array = file.readAll();
         QString str(array.data());
         int pos = str.indexOf(parameter);
-        int endLine = str.indexOf("\n",pos);
-        str.remove(pos, endLine - pos + 1);
+        if(pos != -1){
+            int endLine = str.indexOf("\n",pos);
+            str.remove(pos, endLine - pos + 1);
+        }
+        else{
+            pos = str.size();
+        }
         str.insert(pos, parameter + " " + value + "\r\n");
         file.seek(0);
         array = str.toLatin1();
@@ -176,7 +182,7 @@ QString MainWindow::readConfigParameter(QString parameter){
         int pos = str.indexOf(parameter);
         int endLine = str.indexOf("\r",pos);
         int spacePos = str.indexOf(" ",pos);
-        QString value = str.mid(spacePos, endLine - spacePos);
+        QString value = str.mid(spacePos + 1, endLine - spacePos);
         return value;
     }
     else{
