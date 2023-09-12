@@ -146,12 +146,8 @@ bool parserGCode::parseGcommand(QString frame, drawCommand *command){
         }
         case(1):{//линейное перемещение
             tmp1 = 0;//для проверки на наличие хоть одной координаты
-            if(currentZ == 0){
-                command->setType(COMMAND_LINE);
-            }
-            else{
-                command->setType(COMMAND_MOVE);
-            }
+            command->setType(COMMAND_LINE);
+
             if(findParam("X", frame, &tmpFloat)){
                 command->setMoveX(tmpFloat);
                 setCurrentX(tmpFloat);
@@ -177,50 +173,20 @@ bool parserGCode::parseGcommand(QString frame, drawCommand *command){
             }
             break;
         }
-        case(2):{
-            switch(com){
-                case(2):{
-                    command->setType(COMMAND_ARC_FCW);//по часовой
-                    break;
-                }
-                case(3):{
-                    command->setType(COMMAND_ARC_RCW);//против часовой
-                    break;
-                }
-            }
-            if(findParam("X", frame, &tmpFloat)){
-                command->setMoveX(tmpFloat);
-                setCurrentX(tmpFloat);
-                tmp1 ++;
-            }
-            if(findParam("Y", frame, &tmpFloat)){
-                command->setMoveY(tmpFloat);
-                setCurrentY(tmpFloat);
-                tmp1 ++;
-            }
-            if(findParam("Z", frame, &tmpFloat)){
-                command->setMoveZ(tmpFloat);
-                setCurrentZ(tmpFloat);
-                tmp1 ++;
-            }
-            if(findParam("R", frame, &tmpFloat)){
-                command->setR(tmpFloat);
-            }
-            else{
-                if(findParam("I", frame, &tmpFloat)){
-                    command->setI(tmpFloat);
-                }
-                if(findParam("J", frame, &tmpFloat)){
-                    command->setJ(tmpFloat);
-                }
-                if(findParam("K", frame, &tmpFloat)){
-                    command->setK(tmpFloat);
-                }
-            }
-            if(findParam("F", frame, &tmpFloat)){
-                currentForce = tmpFloat;
-            }
-            command->setForce(currentForce);
+        case(2):{//круговая интерполяция по часовой
+            command->setType(COMMAND_ARC_FCW);
+            return parseCicleInterpolation(frame, command);
+        }
+        case(3):{//круговая интерполяция против часовой
+            command->setType(COMMAND_ARC_RCW);
+            return parseCicleInterpolation(frame, command);
+        }
+        case(90):{//абсолютные координаты
+            relativeCoordinates = false;
+            break;
+        }
+        case(91):{//относительные координаты
+            relativeCoordinates = true;
             break;
         }
     }
@@ -271,5 +237,45 @@ void parserGCode::setCurrentZ(float value){
     else{
         currentZ = value;
     }
+}
+///////////////////////////////////////////////////////////////////////////////////////
+bool parserGCode::parseCicleInterpolation(QString frame, drawCommand *command){
+        int tmp1 = frame.indexOf(" ");
+        float tmpFloat = 0;
+
+    if(findParam("X", frame, &tmpFloat)){
+        command->setMoveX(tmpFloat);
+        setCurrentX(tmpFloat);
+        tmp1 ++;
+    }
+    if(findParam("Y", frame, &tmpFloat)){
+        command->setMoveY(tmpFloat);
+        setCurrentY(tmpFloat);
+        tmp1 ++;
+    }
+    if(findParam("Z", frame, &tmpFloat)){
+        command->setMoveZ(tmpFloat);
+        setCurrentZ(tmpFloat);
+        tmp1 ++;
+    }
+    if(findParam("R", frame, &tmpFloat)){
+        command->setR(tmpFloat);
+    }
+    else{
+        if(findParam("I", frame, &tmpFloat)){
+            command->setI(tmpFloat);
+        }
+        if(findParam("J", frame, &tmpFloat)){
+            command->setJ(tmpFloat);
+        }
+        if(findParam("K", frame, &tmpFloat)){
+            command->setK(tmpFloat);
+        }
+    }
+    if(findParam("F", frame, &tmpFloat)){
+        currentForce = tmpFloat;
+    }
+    command->setForce(currentForce);
+    return true;
 }
 /////////////////////////////////////////////////////////////////////////////////

@@ -28,6 +28,7 @@ protected:
     void setCurrentX(float value);
     void setCurrentY(float value);
     void setCurrentZ(float value);
+    bool parseCicleInterpolation(QString frame, drawCommand *command);
 
     QVector<drawCommand> *drawProgramm;
     bool relativeCoordinates;//флаг использования относительных/абсолюных коорлинат
