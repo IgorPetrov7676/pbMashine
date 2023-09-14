@@ -126,18 +126,7 @@ void drawCommand::draw(QPainter *painter){
                 pen.setWidth(penDiameter);
             }
             painter->setPen(pen);
-            QRect rect=calcArcRect();
-            int angle1=(calcAngle(currentX,currentY,currentX+I,currentY+J)+90)*16;
-            int angle2=(calcAngle(moveX,moveY,currentX+I,currentY+J)+90)*16;
-            int angle=0;
-            if(angle1==angle2){
-                angle=5760;
-            }
-            else{
-                angle=angle1-angle2;
-            }
-            painter->drawArc(rect,angle1,-angle);
-            //painter->drawRect(rect);
+            drawArc(painter);
             break;
         }
         case(COMMAND_ARC_FCW):{
@@ -150,18 +139,7 @@ void drawCommand::draw(QPainter *painter){
                 pen.setWidth(penDiameter);
             }
             painter->setPen(pen);
-            QRect rect=calcArcRect();
-            int angle=0;
-            int angle1=16*(calcAngle(currentX,currentY,currentX+I,currentY+J)+90);
-            int angle2=16*(calcAngle(moveX,moveY,currentX+I,currentY+J)+90);
-            if(angle1==angle2){
-                angle=5760;
-            }
-            else{
-                angle=angle1-angle2;
-            }
-            painter->drawArc(rect,angle1,angle);//5760
-            //painter->drawRect(rect);
+            drawArc(painter);
             break;
         }
         default:{
@@ -180,8 +158,6 @@ void drawCommand::setShine(bool s){
 }
 /////////////////////////////////////////////////////////////////////////////////
 QRect drawCommand::calcArcRect(){
-    //float centerX=moveX+I;//изначальный вариант. пока оставим
-    //float centerY=moveY+J;
     float centerX=currentX+I;
     float centerY=currentY+J;
     float radius=sqrt((I*I)+(J*J));
@@ -193,11 +169,17 @@ QRect drawCommand::calcArcRect(){
     return rect;
 }
 /////////////////////////////////////////////////////////////////////////////////
-int drawCommand::calcAngle(float X, float Y, float centerX, float centerY){
-    float tmpI=centerX-X;//противолежащий катет
-    float tmpJ=centerY-Y;//прилежащий катет
-    float rez=round(atan2f(tmpI,tmpJ)*180/3.14);
-    return static_cast<int>(rez);
+void drawCommand::drawArc(QPainter *painter){
+    QRect rect = calcArcRect();
+    QPoint center(currentX + I, currentY + J);
+    QPoint pointStart(currentX, currentY);
+    QPoint pointEnd(moveX, moveY);
+    QVector2D vector1(center - pointStart);
+    QVector2D vector2(center - pointEnd);
+    QVector2D vector3(center - QPoint(1, 0));//вектор на 3 часа
+    int angle1 = QVector2D::dotProduct(vector1, vector3);
+    int angle2 = QVector2D::dotProduct(vector2, vector3);
+    painter->drawArc(rect,angle1,angle2);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 void drawCommand::checkCommand(){

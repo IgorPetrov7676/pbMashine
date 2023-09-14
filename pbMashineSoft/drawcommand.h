@@ -2,6 +2,7 @@
 #define DRAWCOMMAND_H
 
 #include <QPainter>
+#include <QVector2D>
 #include <math.h>
 
 
@@ -66,7 +67,7 @@ protected:
     bool shine;
 
     QRect calcArcRect();
-    int calcAngle(float X, float Y, float centerX, float centerY);
+    void drawArc(QPainter *painter);//расчет и отрисовка дуги
     void checkCommand();//проверяем явно указанные параметры
 
 };
