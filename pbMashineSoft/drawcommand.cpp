@@ -171,15 +171,18 @@ QRect drawCommand::calcArcRect(){
 /////////////////////////////////////////////////////////////////////////////////
 void drawCommand::drawArc(QPainter *painter){
     QRect rect = calcArcRect();
-    QPoint center(currentX + I, currentY + J);
     QPoint pointStart(currentX, currentY);
-    QPoint pointEnd(moveX, moveY);
+    QPoint center(currentX + I, currentY + J);
+    QPoint pointEnd(currentX + moveX, currentY + moveY);
     QVector2D vector1(center - pointStart);
+    vector1.normalize();
     QVector2D vector2(center - pointEnd);
-    QVector2D vector3(center - QPoint(1, 0));//вектор на 3 часа
-    int angle1 = QVector2D::dotProduct(vector1, vector3);
-    int angle2 = QVector2D::dotProduct(vector2, vector3);
-    painter->drawArc(rect,angle1,angle2);
+    vector2.normalize();
+    QVector2D vector3(QPoint(1, 0));//вектор на 3 часа
+    float angle1 = acos(QVector2D::dotProduct(vector1, vector3)) * (180 / 3.141592653589793);
+    float angle2 = acos(QVector2D::dotProduct(vector2, vector3)) * (180 / 3.141592653589793);
+    //if(angle1 == angle2)
+    painter->drawArc(rect,0 - (16 * angle1),16 * (360 - (angle1 - angle2)));
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 void drawCommand::checkCommand(){

@@ -33,10 +33,23 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->dWidget, SIGNAL(startProgrammSignal(QStringList*)), this, SLOT(sendProgrammSlot(QStringList*)));
 
     distribForms();
+
+    //открываем посдеднюю открытую вкладку
+    QString index = readConfigParameter("currentTab");
+    int indexInt = 0;
+    if(!index.isEmpty()){
+        bool ok = false;
+        indexInt = index.toInt(&ok);
+        if(!ok){
+            indexInt = 0;
+        }
+    }
+    ui->tabWidget->setCurrentIndex(indexInt);
 }
 ////////////////////////////////////////////////////////////////////////////////////
 MainWindow::~MainWindow()
 {
+    writeConfigParameter("currentTab",QString::number(ui->tabWidget->currentIndex()));
     delete portName;
     delete conIndicator;
     delete ui;
@@ -182,7 +195,7 @@ QString MainWindow::readConfigParameter(QString parameter){
         int pos = str.indexOf(parameter);
         int endLine = str.indexOf("\r",pos);
         int spacePos = str.indexOf(" ",pos);
-        QString value = str.mid(spacePos + 1, endLine - spacePos);
+        QString value = str.mid(spacePos + 1, endLine - spacePos - 1);
         return value;
     }
     else{

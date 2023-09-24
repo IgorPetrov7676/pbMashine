@@ -19,6 +19,7 @@ drawWidget::drawWidget(QWidget *parent) :
     connect(ui->moveSpinBox, SIGNAL(valueChanged(double)), this, SLOT(moveChangeSlot(double)));
     connect(ui->reParseButton, SIGNAL(clicked(bool)), this, SLOT(reParseSlot()));
     connect(ui->runButton, SIGNAL(clicked(bool)), this, SLOT(startSlot()));
+    connect(ui->gCodeTextEdit, SIGNAL(updateViewSignal()), ui->vWidget, SLOT(update()));
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 void drawWidget::setGerberFile(QFile *file){

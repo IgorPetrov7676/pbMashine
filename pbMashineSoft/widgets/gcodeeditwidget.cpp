@@ -57,27 +57,9 @@ void gCodeEditWidget::textChangedSlot(){
 }
 ///////////////////////////////////////////////////////////////////////////////////
 void gCodeEditWidget::cursorPosChangedSlot(){
-
-    //может быть вообще не стоит проверять синтаксис на лету
     QTextCursor cursor=this->textCursor();
     QTextBlock block=cursor.block();
     int number=block.blockNumber();
     parser.shineDrawCommand(number);
     emit updateViewSignal();
-//    QTextCharFormat fmt;
-//    int startPos=0;
-//    int endPos=0;
-
-//    if(parser.isStringCorrect(block.text())){
-//        fmt.setBackground(Qt::white);
-//    }
-//    else{
-//        fmt.setBackground(Qt::red);
-//    }
-//    startPos=block.position();
-//    endPos=startPos+block.length()-1;
-//    cursor.setPosition(startPos, QTextCursor::MoveAnchor);
-//    cursor.setPosition(endPos, QTextCursor::KeepAnchor);
-//    cursor.setCharFormat(fmt);
-
 }

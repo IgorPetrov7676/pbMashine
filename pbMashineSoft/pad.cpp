@@ -118,18 +118,18 @@ QStringList pad::calcGCode(float penDiameter, float force, float moveSpeed, floa
             break;
         }
         case(APP_RECT):{
-            int lines=0;
-            float lastLineOffset=0;
-            float center1=0;//смещения центров дуг верхней/нижней или правой/левой
-            float center2=0;
-            float centerOffset=0;
-            float penRadius=penDiameter/2;
+            int lines = 0;
+            float lastLineOffset = 0;
+            float center1 = 0;//смещения центров дуг верхней/нижней или правой/левой
+            float center2 = 0;
+            float centerOffset = 0;
+            float penRadius=penDiameter / 2;
 
-            if(app->getXSize()>=app->getYSize()){//горизонтальный прямоугольник
-                lines=(app->getYSize()/2)/(penDiameter/2);//количество целых линий
-                lastLineOffset=(app->getYSize()/2)-(penDiameter/2*lines);//смещение последней линии
+            if(app->getXSize() >= app->getYSize()){//горизонтальный прямоугольник
+                lines = (app->getYSize() / 2) / (penDiameter / 2);//количество целых линий
+                lastLineOffset = (app->getYSize() / 2) - (penDiameter / 2 * lines);//смещение последней линии
                 //например, если размер Pad-а 2.2мм, а диаметр пера 1мм, то смещение последней линии будет 0.1мм
-                float halfSize=app->getXSize()/2;
+                float halfSize=app->getXSize() / 2;
                 float step=0;
                 centerOffset=halfSize-((lines*penRadius)+lastLineOffset);
                 center1=X+centerOffset;

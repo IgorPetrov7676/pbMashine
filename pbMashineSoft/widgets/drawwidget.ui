@@ -43,7 +43,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>Настройкиxx</string>
+    <string>Настройки</string>
    </property>
    <widget class="QDoubleSpinBox" name="zPosSpinBox">
     <property name="geometry">
