@@ -125,8 +125,14 @@ bool parserGCode::parseGcommand(QString frame, drawCommand *command){
             tmp1 = 0;//для проверки на наличие хоть одной координаты
             command->setType(COMMAND_MOVE);
             if(findParam("X", frame, &tmpFloat)){
-                command->setMoveX(tmpFloat);
-                setCurrentX(tmpFloat);
+                if(relativeCoordinates){
+                    command->setMoveX(tmpFloat);
+                    currentX += tmpFloat;
+                }
+                else{
+                    command->setMoveX(tmpFloat);
+                    currentX = tmpFloat;
+                }
                 tmp1 ++;
             }
             if(findParam("Y", frame, &tmpFloat)){

@@ -106,7 +106,7 @@ void drawCommand::draw(QPainter *painter){
         case(COMMAND_LINE):{
             if(shine){
                 pen.setColor(QColor(Qt::red));
-                pen.setWidth(penDiameter*2);
+                pen.setWidth(3);
             }
             else{
                 pen.setColor(QColor(Qt::black));

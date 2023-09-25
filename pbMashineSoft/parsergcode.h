@@ -31,7 +31,7 @@ protected:
     bool parseCicleInterpolation(QString frame, drawCommand *command);
 
     QVector<drawCommand> *drawProgramm;
-    bool relativeCoordinates;//флаг использования относительных/абсолюных коорлинат
+    bool relativeCoordinates;//флаг использования относительных/абсолюных координат
     float currentX;
     float currentY;
     float currentZ;

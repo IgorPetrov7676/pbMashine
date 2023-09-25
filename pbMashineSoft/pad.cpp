@@ -118,13 +118,10 @@ QStringList pad::calcGCode(float penDiameter, float force, float moveSpeed, floa
             break;
         }
         case(APP_RECT):{
-            int linesV = 0;
-            int linesH = 0;
+            int lines = 0;
             float lastLineOffset = 0;
-            float center1 = 0;//смещения центров дуг верхней/нижней или правой/левой
-            float center2 = 0;
             float centerOffset = 0;
-            float penRadius=penDiameter / 2;
+            float penRadius = penDiameter / 2;
 
             if(app->getXSize() >= app->getYSize()){//горизонтальный прямоугольник
 //                lines = (app->getYSize() / 2) / (penDiameter / 2);//количество целых линий
@@ -156,33 +153,32 @@ QStringList pad::calcGCode(float penDiameter, float force, float moveSpeed, floa
 //                tmpProg.append("G00 Z"+QString::number(zOffset)+" F"+QString::number(moveSpeed)+"\n");
             }
             else{//вертикальный прямоугольник
-                linesH = (app->getXSize() / 2) / (penDiameter / 2);//количество целых линий по горизонтали
-                linesV = (app->)
+                lines = (app->getXSize() / 2) / penRadius;//количество целых линий по горизонтали
                 lastLineOffset = (app->getXSize() / 2) - (penDiameter / 2 * lines);//смещение последней линии
                 //например, если размер Pad-а 2.2мм, а диаметр пера 1мм, то смещение последней линии будет 0.1мм
                 float halfSize = app->getYSize() / 2;
                 float step = 0;
-                centerOffset=halfSize-((lines*penRadius)+lastLineOffset);
-                center1=Y+centerOffset;
-                center2=Y-centerOffset;
-                tmpProg.append("G00 X"+QString::number(X)+" Y"+QString::number(center1)+"F"+QString::number(moveSpeed)+"\n");//смещаем инструмент в позицию
-                tmpProg.append("G00 Z"+QString::number(0)+" F"+QString::number(moveSpeed)+"\n");//опускаем в позицию рисования, делаем точку
-                tmpProg.append("G01 Y"+QString::number(center2)+" F"+QString::number(force)+"\n");//рисуем центральную линию
-                for(int n=1;n!=lines+1;n++){//рисуем овалы по количеству линий
-                    step=penRadius*n;
-                    tmpProg.append("G01 X"+QString::number(X+step)+"\n");//смещение на радиус пера по X
-                    tmpProg.append("G01 Y"+QString::number(center1+step)+"\n");//верхняя линия
-                    tmpProg.append("G01 X"+QString::number(X-step)+"\n");//дуга снизу
-                    tmpProg.append("G01 Y"+QString::number(center2-step)+"\n");//нижняя линия
+                centerOffset = halfSize - ((lines * penRadius) + lastLineOffset);
+
+                tmpProg.append("G00 X" + QString::number(X) + " Y" + QString::number(Y - halfSize) + " F"+QString::number(moveSpeed)+"\n");//смещаем инструмент в позицию - половина размера по вертикали
+                tmpProg.append("G00 Z" + QString::number(0) + " F" + QString::number(moveSpeed) + "\n");//опускаем в позицию рисования, делаем точку
+                tmpProg.append("G91\n");//временно переключаемся на относительные координаты
+                tmpProg.append("G01 Y" + QString::number(app->getYSize()) + " F" + QString::number(force) + "\n");//рисуем центральную линию с низу в верх
+                for(int n=1;n!=lines+1;n++){//рисуем по количеству линий
+                    step = penRadius * n;
+                    tmpProg.append("G01 X" + QString::number(step) + "\n");//смещение на радиус пера по X
+                    tmpProg.append("G01 Y" + QString::number(0 - app->getYSize()) + "\n");//правая линия движение вниз
+                    tmpProg.append("G01 X" + QString::number(0 - (step * 2)) + "\n");//смещение влево на два радиуса
+                    tmpProg.append("G01 Y"+QString::number(app->getYSize())+"\n");//левая линия движение вверх
                 }
                 tmpProg.append("G01 X"+QString::number(X+step)+"\n");//смещение на радиус пера по Y
                 if(lastLineOffset!=0){
-                    tmpProg.append("G01 X"+QString::number(X+step+lastLineOffset)+"\n");//смещение на радиус пера по X
-                    tmpProg.append("G01 Y"+QString::number(center1+step)+"\n");//верхняя линия
-                    tmpProg.append("G01 X"+QString::number(X-step-lastLineOffset)+"\n");//дуга справа
-                    tmpProg.append("G01 Y"+QString::number(center2-step)+"\n");//нижняя линия
-                    tmpProg.append("G01 X"+QString::number(X+step)+"\n");//смещение на радиус пера по Y
+                    tmpProg.append("G01 X" + QString::number(step + lastLineOffset) + "\n");//смещение на радиус пера по X
+                    tmpProg.append("G01 Y" + QString::number(0 - app->getYSize()) + "\n");//правая линия движение вниз
+                    tmpProg.append("G01 X" + QString::number(0 - ((step + lastLineOffset)  * 2)) + "\n");//смещение влево на два радиуса
+                    tmpProg.append("G01 Y"+QString::number(app->getYSize())+"\n");//левая линия движение вверх
                 }
+                tmpProg.append("G90\n");//переключаемся на абсолютные координаты
                 tmpProg.append("G00 Z"+QString::number(zOffset)+" F2\n");
             }
             break;
