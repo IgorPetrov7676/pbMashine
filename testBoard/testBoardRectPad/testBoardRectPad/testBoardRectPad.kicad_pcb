@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew "(5.1.4)-1")
+(kicad_pcb (version 20171130) (host pcbnew 5.1.5+dfsg1-2build2)
 
   (general
     (thickness 1.6)
@@ -55,14 +55,14 @@
     (mod_edge_width 0.12)
     (mod_text_size 1 1)
     (mod_text_width 0.15)
-    (pad_size 5 7)
+    (pad_size 5.3 7)
     (pad_drill 0.8001)
     (pad_to_mask_clearance 0.051)
     (solder_mask_min_width 0.25)
     (aux_axis_origin 0 0)
     (visible_elements FFFFFF7F)
     (pcbplotparams
-      (layerselection 0x010fc_ffffffff)
+      (layerselection 0x00000_ffffffff)
       (usegerberextensions false)
       (usegerberattributes false)
       (usegerberadvancedattributes false)
@@ -85,7 +85,7 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
       (outputdirectory ""))
   )
@@ -101,7 +101,7 @@
     (uvia_drill 0.1)
   )
 
-  (module Connector_Wire:SolderWirePad_1x01_Drill0.8mm (layer F.Cu) (tedit 6511892D) (tstamp 6511D9B9)
+  (module Connector_Wire:SolderWirePad_1x01_Drill0.8mm (layer F.Cu) (tedit 65124350) (tstamp 6511D9B9)
     (at 105.41 80.01)
     (descr "Wire solder connection")
     (tags connector)
@@ -119,7 +119,7 @@
     (fp_text user %R (at 0 0) (layer F.Fab)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (pad 1 thru_hole rect (at 0 0) (size 5 7) (drill 0.8001) (layers *.Cu *.Mask))
+    (pad 1 thru_hole rect (at 0 0) (size 5.3 7) (drill 0.8001) (layers *.Cu *.Mask))
   )
 
 )

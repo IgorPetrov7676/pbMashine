@@ -111,49 +111,49 @@ bool gerberConverter::parseAsSomethingElse(){
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool gerberConverter::parseGerberFormat(){
-    int count=gerberCode.size();
-    int n=0;
+    int count = gerberCode.size();
+    int n = 0;
 
-    for(;n!=count;n++){
-        QString string=gerberCode.at(n);
-        if(string.left(3)=="G04"){
-            if(string.left(15)=="G04 Gerber Fmt "){
-                bool ok=false;
-                int tmp1=string.indexOf(".",14);
-                QString tmpStr=string.mid(15,tmp1-15);
-                pointPos=tmpStr.toInt(&ok);
+    for(; n != count; n ++){
+        QString string = gerberCode.at(n);
+        if(string.left(3) == "G04"){
+            if(string.left(15) == "G04 Gerber Fmt "){
+                bool ok = false;
+                int tmp1 = string.indexOf(".",14);
+                QString tmpStr = string.mid(15, tmp1 - 15);
+                pointPos = tmpStr.toInt(&ok);
                 if(!ok){
-                    lastError=tr("Невозможно получить позицию десятичной точки. Строка ")+QString::number(n);
+                    lastError = tr("Невозможно получить позицию десятичной точки. Строка ") + QString::number(n);
                     return false;
                 }
-                int tmp2=string.indexOf(",",tmp1);
-                tmpStr=string.mid(tmp1+1,tmp2-tmp1-1);
-                decDigits=tmpStr.toInt(&ok);
+                int tmp2 = string.indexOf(",", tmp1);
+                tmpStr = string.mid(tmp1 + 1, tmp2 - tmp1 - 1);
+                decDigits = tmpStr.toInt(&ok);
                 if(!ok){
-                    lastError=tr("Невозможно получить количество знаков после запятой. Строка ")+QString::number(n);
+                    lastError = tr("Невозможно получить количество знаков после запятой. Строка ") + QString::number(n);
                     return false;
                 }
-                tmpStr=string.mid(tmp2+2,20);
-                if(tmpStr=="Leading zero omitted"){
-                    zOmmitt=ZERO_LEADING;
+                tmpStr = string.mid(tmp2 + 2,20);
+                if(tmpStr == "Leading zero omitted"){
+                    zOmmitt = ZERO_LEADING;
                 }
                 else{
-                    lastError=tr("Невозможно получить информацию о подавлении нулей. Строка ")+QString::number(n);
+                    lastError = tr("Невозможно получить информацию о подавлении нулей. Строка ") + QString::number(n);
                     return false;
                 }
 
-                tmp1=string.indexOf(",",tmp2+1);
-                tmpStr=string.mid(tmp1+2,21);
-                if(tmpStr!="Abs format (unit mm)*"){
-                    lastError=tr("Невозможно получить информацию о единицах измерения. Строка ")+QString::number(n);
+                tmp1 = string.indexOf(",", tmp2 + 1);
+                tmpStr = string.mid(tmp1 + 2, 21);
+                if(tmpStr != "Abs format (unit mm)*"){
+                    lastError = tr("Невозможно получить информацию о единицах измерения. Строка ") + QString::number(n);
                     return false;
                 }
                 break;
             }
         }
     }
-    if(n==count){
-        lastError=tr("Невозможно получить данные о формате Gerber");
+    if(n == count){
+        lastError = tr("Невозможно получить данные о формате Gerber");
         return false;
     }
     return true;
@@ -722,6 +722,11 @@ void gerberConverter::findWorkRect(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool gerberConverter::reparseExistGerberCode(){
     if(!gerberCode.isEmpty()){
+        deleteAppertures();
+        deletePads();
+        deletePaths();
+        //gerberCode.clear();
+        gProgramm.clear();
         return parseAsKiCad();
     }
     else{

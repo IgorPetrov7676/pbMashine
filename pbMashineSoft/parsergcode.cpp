@@ -22,7 +22,7 @@ bool parserGCode::readProgramm(QString programm){
     while(index != -1){
         drawCommand com;
         com.setPenDiameter(penDiameter);
-        QString tmp=programm.mid(pos,index-pos);
+        QString tmp=programm.sliced(pos,index-pos);
         pos=index+1;
         if(!parseFrame(tmp,&com)){
             return false;
@@ -75,7 +75,7 @@ bool parserGCode::parseFrame(QString frame, drawCommand *command){
     if(frame.left(1)=="N"){// если первый символ N, то читаем номер
         bool ok=false;
         tmp=frame.indexOf(" ");
-        QString num=frame.mid(1,tmp);
+        QString num=frame.sliced(1,tmp);
         tmp=num.toInt(&ok);
         if(!ok){
             return false;
@@ -108,11 +108,9 @@ bool parserGCode::parseFrame(QString frame, drawCommand *command){
 }
 ///////////////////////////////////////////////////////////////////////////////////
 bool parserGCode::parseGcommand(QString frame, drawCommand *command){
-    int tmp1 = frame.indexOf(" ");
-    float tmpFloat = 0;
     bool ok = false;
-
-    int com = frame.mid(0,tmp1 + 1).toInt(&ok);
+    int spacePos = frame.indexOf(" ");
+    int com = frame.sliced(0, spacePos).toInt(&ok);
     if(!ok){
         return false;
     }
@@ -122,70 +120,20 @@ bool parserGCode::parseGcommand(QString frame, drawCommand *command){
 
     switch(com){
         case(0):{//холостой ход
-            tmp1 = 0;//для проверки на наличие хоть одной координаты
             command->setType(COMMAND_MOVE);
-            if(findParam("X", frame, &tmpFloat)){
-                if(relativeCoordinates){
-                    command->setMoveX(tmpFloat);
-                    currentX += tmpFloat;
-                }
-                else{
-                    command->setMoveX(tmpFloat);
-                    currentX = tmpFloat;
-                }
-                tmp1 ++;
-            }
-            if(findParam("Y", frame, &tmpFloat)){
-                command->setMoveY(tmpFloat);
-                setCurrentY(tmpFloat);
-                tmp1 ++;
-            }
-            if(findParam("Z", frame, &tmpFloat)){
-                command->setMoveZ(tmpFloat);
-                setCurrentZ(tmpFloat);
-                tmp1 ++;
-            }
-            if(tmp1 == 0){
-                return false;//если ни одного параметра не нашли, то это ошибка
-            }
-            break;
+            return parseParameters(frame, command);
         }
         case(1):{//линейное перемещение
-            tmp1 = 0;//для проверки на наличие хоть одной координаты
             command->setType(COMMAND_LINE);
-
-            if(findParam("X", frame, &tmpFloat)){
-                command->setMoveX(tmpFloat);
-                setCurrentX(tmpFloat);
-                tmp1 ++;
-            }
-            if(findParam("Y", frame, &tmpFloat)){
-                command->setMoveY(tmpFloat);
-                setCurrentY(tmpFloat);
-                tmp1 ++;
-            }
-            if(findParam("Z", frame, &tmpFloat)){
-                command->setMoveZ(tmpFloat);
-                setCurrentZ(tmpFloat);
-                command->setType(COMMAND_MOVE);//если ось Z меняется и не равна 0 то это перемещение, а не рисование
-                tmp1 ++;
-            }
-            if(findParam("F", frame, &tmpFloat)){
-                currentForce=tmpFloat;
-            }
-            command->setForce(currentForce);//подачу присваиваем в любом случае или текущую или новую
-            if(tmp1==0){
-                return false;//если ни одного параметра не нашли, то это ошибка
-            }
-            break;
+            return parseParameters(frame, command);
         }
         case(2):{//круговая интерполяция по часовой
             command->setType(COMMAND_ARC_FCW);
-            return parseCicleInterpolation(frame, command);
+            return parseParameters(frame, command);
         }
         case(3):{//круговая интерполяция против часовой
             command->setType(COMMAND_ARC_RCW);
-            return parseCicleInterpolation(frame, command);
+            return parseParameters(frame, command);
         }
         case(90):{//абсолютные координаты
             relativeCoordinates = false;
@@ -210,59 +158,53 @@ bool parserGCode::findParam(QString param, QString frame, float *rez){
     if(index2==-1){
         return false;
     }
-    QString tmp=frame.mid(index1+1,index2-index1);
+    QString tmp=frame.sliced(index1+1,index2-index1);
     *rez=tmp.toFloat(&ok);
     if(!ok){
         return false;
     }
     return true;
 }
-////////////////////////////////////////////////////////////////////////////////////////
-void parserGCode::setCurrentX(float value){
-    if(relativeCoordinates){
-        currentX += value;
-    }
-    else{
-        currentX = value;
-    }
-}
-////////////////////////////////////////////////////////////////////////////////////////
-void parserGCode::setCurrentY(float value){
-    if(relativeCoordinates){
-        currentY += value;
-    }
-    else{
-        currentY = value;
-    }
-}
-///////////////////////////////////////////////////////////////////////////////////////
-void parserGCode::setCurrentZ(float value){
-    if(relativeCoordinates){
-        currentZ += value;
-    }
-    else{
-        currentZ = value;
-    }
-}
-///////////////////////////////////////////////////////////////////////////////////////
-bool parserGCode::parseCicleInterpolation(QString frame, drawCommand *command){
-        int tmp1 = frame.indexOf(" ");
-        float tmpFloat = 0;
+///////////////////////////////////////////////////////////////////////////////////////////
+bool parserGCode::parseParameters(QString frame, drawCommand *command){
+    int tmp1 = frame.indexOf(" ");
+    float tmpFloat = 0;
 
     if(findParam("X", frame, &tmpFloat)){
-        command->setMoveX(tmpFloat);
-        setCurrentX(tmpFloat);
+        if(relativeCoordinates){
+            command->setMoveX(currentX + tmpFloat);
+            currentX += tmpFloat;
+        }
+        else{
+            command->setMoveX(tmpFloat);
+            currentX = tmpFloat;
+        }
         tmp1 ++;
     }
     if(findParam("Y", frame, &tmpFloat)){
-        command->setMoveY(tmpFloat);
-        setCurrentY(tmpFloat);
+        if(relativeCoordinates){
+            command->setMoveY(currentY + tmpFloat);
+            currentY += tmpFloat;
+        }
+        else{
+            command->setMoveY(tmpFloat);
+            currentY = tmpFloat;
+        }
         tmp1 ++;
     }
     if(findParam("Z", frame, &tmpFloat)){
-        command->setMoveZ(tmpFloat);
-        setCurrentZ(tmpFloat);
+        if(relativeCoordinates){
+            command->setMoveZ(currentZ + tmpFloat);
+            currentZ += tmpFloat;
+        }
+        else{
+            command->setMoveX(tmpFloat);
+            currentZ = tmpFloat;
+        }
         tmp1 ++;
+    }
+    if(tmp1 == 0){
+        return false;//если ни одного параметра не нашли, то это ошибка и можно дальше не читать
     }
     if(findParam("R", frame, &tmpFloat)){
         command->setR(tmpFloat);
