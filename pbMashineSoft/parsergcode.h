@@ -24,11 +24,8 @@ protected:
     bool parseFrame(QString frame, drawCommand *command);
     bool parseGcommand(QString frame, drawCommand *command);
     bool findParam(QString param, QString frame, float *rez);
-    //задание текущих координат с учетом флага относительности
-    void setCurrentX(float value);
-    void setCurrentY(float value);
-    void setCurrentZ(float value);
     bool parseCicleInterpolation(QString frame, drawCommand *command);
+    bool parseParameters(QString frame, drawCommand *command);
 
     QVector<drawCommand> *drawProgramm;
     bool relativeCoordinates;//флаг использования относительных/абсолюных координат
