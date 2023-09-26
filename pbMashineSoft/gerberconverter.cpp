@@ -725,7 +725,6 @@ bool gerberConverter::reparseExistGerberCode(){
         deleteAppertures();
         deletePads();
         deletePaths();
-        //gerberCode.clear();
         gProgramm.clear();
         return parseAsKiCad();
     }
