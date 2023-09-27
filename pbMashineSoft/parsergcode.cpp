@@ -22,7 +22,11 @@ bool parserGCode::readProgramm(QString programm){
     while(index != -1){
         drawCommand com;
         com.setPenDiameter(penDiameter);
+#if QT_VERSION > 0x051300
         QString tmp=programm.sliced(pos,index-pos);
+#else
+        QString tmp=programm.mid(pos,index-pos);
+#endif
         pos=index+1;
         if(!parseFrame(tmp,&com)){
             return false;
@@ -75,7 +79,11 @@ bool parserGCode::parseFrame(QString frame, drawCommand *command){
     if(frame.left(1)=="N"){// если первый символ N, то читаем номер
         bool ok=false;
         tmp=frame.indexOf(" ");
-        QString num=frame.sliced(1,tmp);
+#if QT_VERSION > 0x051300
+        QString num = frame.sliced(1, tmp);
+#else
+        QString num = frame.mid(1, tmp);
+#endif
         tmp=num.toInt(&ok);
         if(!ok){
             return false;
@@ -110,7 +118,13 @@ bool parserGCode::parseFrame(QString frame, drawCommand *command){
 bool parserGCode::parseGcommand(QString frame, drawCommand *command){
     bool ok = false;
     int spacePos = frame.indexOf(" ");
+
+#if QT_VERSION > 0x051300
     int com = frame.sliced(0, spacePos).toInt(&ok);
+#else
+    int com = frame.mid(0, spacePos).toInt(&ok);
+#endif
+
     if(!ok){
         return false;
     }
@@ -158,7 +172,13 @@ bool parserGCode::findParam(QString param, QString frame, float *rez){
     if(index2==-1){
         return false;
     }
+
+#if QT_VERSION > 0x051300
     QString tmp=frame.sliced(index1+1,index2-index1);
+#else
+    QString tmp=frame.mid(index1+1,index2-index1);
+#endif
+
     *rez=tmp.toFloat(&ok);
     if(!ok){
         return false;

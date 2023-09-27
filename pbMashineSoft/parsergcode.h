@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QVector>
+#include <QtGlobal>
 #include "drawcommand.h"
 #include "defines.h"
 
