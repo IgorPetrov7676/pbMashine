@@ -87,6 +87,7 @@ protected:
     void convertCoordinates();
     void findWorkRect();
     void allClear();
+    void endProgramm();
 
 protected slots:
     void processStopSlot();

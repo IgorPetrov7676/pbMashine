@@ -30,6 +30,7 @@ protected slots:
     void moveChangeSlot(double value);
     void reParseSlot();
     void startSlot();
+    void stopSlot();
 
 signals:
     void openFileSignal(QString fileType);
