@@ -119,7 +119,7 @@ void drawCommand::draw(QPainter *painter){
         case(COMMAND_ARC_RCW):{
             if(shine){
                 pen.setColor(QColor(Qt::red));
-                pen.setWidth(penDiameter*2);
+                pen.setWidth(penDiameter*10);
             }
             else{
                 pen.setColor(QColor(Qt::black));
@@ -132,7 +132,7 @@ void drawCommand::draw(QPainter *painter){
         case(COMMAND_ARC_FCW):{
             if(shine){
                 pen.setColor(QColor(Qt::red));
-                pen.setWidth(penDiameter*2);
+                pen.setWidth(penDiameter*10);
             }
             else{
                 pen.setColor(QColor(Qt::black));

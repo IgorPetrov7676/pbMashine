@@ -413,7 +413,7 @@ void gerberConverter::allClear(){
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void gerberConverter::endProgramm(){
-    addGCommand("G00 X0 Y0 Z0 F" + QString::number(moveSpeed) + "/n");
+    addGCommand("G00 X0 Y0 Z0 F" + QString::number(moveSpeed) + "\n");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 QRectF gerberConverter::getWorkRect(){

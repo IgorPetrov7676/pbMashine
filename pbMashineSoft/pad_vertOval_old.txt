@@ -1,0 +1,30 @@
+lines = (app->getXSize() / 2) / penRadius;//количество целых линий
+                lastLineOffset = (app->getXSize() / 2) - (penRadius * lines);//смещение последней линии
+                lastLineOffset = round(lastLineOffset * 10) / 10;//округляем до одного знака после запятой
+                //например, если размер Pad-а 2.2мм, а диаметр пера 1мм, то смещение последней линии будет 0.1мм
+                float halfSize = app->getYSize() / 2;
+                halfSize = round(halfSize * 10) / 10;//округляем до одного знака после запятой
+                float step = 0;
+                centerOffset = halfSize - ((lines * penRadius) + lastLineOffset);
+                center1 = Y + centerOffset;
+                center2 = Y - centerOffset;
+                tmpProg.append("G00 X"+QString::number(X)+" Y"+QString::number(center1)+" F"+QString::number(moveSpeed)+"\n");//смещаем инструмент в позицию
+                tmpProg.append("G00 Z"+QString::number(0)+" F"+QString::number(moveSpeed)+"\n");//опускаем в позицию рисования, делаем точку
+                tmpProg.append("G01 Y"+QString::number(center2)+" F"+QString::number(force)+"\n");//рисуем центральную линию
+                for(float n = 1; n != lines + 1; n++){//рисуем овалы по количеству линий
+                    step=penRadius*n;
+                    tmpProg.append("G01 X"+QString::number(X+step)+"\n");//смещение на радиус пера по X
+                    tmpProg.append("G03 X"+QString::number(X-step)+" I"+QString::number(-step)+"\n");//дуга сверху
+                    tmpProg.append("G01 Y"+QString::number(center1)+"\n");//верхняя линия
+                    tmpProg.append("G02 X"+QString::number(X+step)+" I"+QString::number(step)+"\n");//дуга снизу
+                    tmpProg.append("G01 Y"+QString::number(center2)+"\n");//нижняя линия
+                }
+                if(lastLineOffset!=0){
+                    tmpProg.append("G01 X"+QString::number(X+step+lastLineOffset)+"\n");//смещение на радиус пера по X
+                    tmpProg.append("G03 X"+QString::number(X-step-lastLineOffset)+" I"+QString::number(-step-lastLineOffset)+"\n");//дуга слева
+                    tmpProg.append("G01 Y"+QString::number(center1)+"\n");//верхняя линия
+                    tmpProg.append("G02 X"+QString::number(X+step+lastLineOffset)+" I"+QString::number(step+lastLineOffset)+"\n");//дуга справа
+                    tmpProg.append("G01 Y"+QString::number(center2)+"\n");//нижняя линия
+                }
+                tmpProg.append("G00 Z"+QString::number(zOffset)+" F"+QString::number(moveSpeed)+"\n");
+            }
