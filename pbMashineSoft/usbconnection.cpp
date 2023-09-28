@@ -117,8 +117,12 @@ void usbConnection::runProgram(QStringList *program){
 //////////////////////////////////////////////////////////////////////////////////
 void usbConnection::stopProgram(){
     runing = false;
-    programPointer = nullptr;
+    if(programPointer != nullptr){
+        delete programPointer;
+        programPointer = nullptr;
+    }
     programCounter = 0;
+    sendStopSlot();
 }
 //////////////////////////////////////////////////////////////////////////////////////
 void usbConnection::pauseProgram(){

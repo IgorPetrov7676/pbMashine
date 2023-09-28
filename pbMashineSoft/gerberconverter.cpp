@@ -102,6 +102,7 @@ bool gerberConverter::parseAsKiCad(){
         return false;
     }
     findWorkRect();
+    endProgramm();
     return true;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -410,6 +411,10 @@ void gerberConverter::allClear(){
     gerberCode.clear();
     gProgramm.clear();
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////
+void gerberConverter::endProgramm(){
+    addGCommand("G00 X0 Y0 Z0 F" + QString::number(moveSpeed) + "/n");
+}
 ////////////////////////////////////////////////////////////////////////////////////////////
 QRectF gerberConverter::getWorkRect(){
     return workRect;
@@ -478,6 +483,7 @@ apperture *gerberConverter::findApperture(int number){
 void gerberConverter::initGProgram(){
     currentPosInGProg=0;
     addGCommand("G90\n");//использовать абсолютные координаты
+    addGCommand("G00 X0 Y0 Z0 F" + QString::number(moveSpeed) + "\n");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void gerberConverter::addGCommand(QString command){
