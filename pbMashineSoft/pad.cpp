@@ -15,6 +15,7 @@ void pad::setY(float value){
 ///////////////////////////////////////////////////////////////////
 void pad::setApp(apperture *value){
     app = value;
+
 }
 ////////////////////////////////////////////////////////////////////
 QStringList pad::calcGCode(float penDiameter, float force, float moveSpeed, float zOffset){
