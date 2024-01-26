@@ -493,30 +493,33 @@ void gerberConverter::addGCommand(QString command){
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 bool gerberConverter::createPadsGCode(){
 
-    if(apperturesArray!=nullptr){
+    if(apperturesArray != nullptr){
         if(toolDiameter<=0){
-            lastError=tr("Диаметр инструмента не задан. Рассчет невозможен.");
+            lastError = tr("Диаметр инструмента не задан. Рассчет невозможен.");
             return false;
         }
-        if(averageSpeed<=0){
-            lastError=tr("Скорость подачи не задана. Расчет невозможен.");
+        if(averageSpeed <= 0){
+            lastError = tr("Скорость подачи не задана. Расчет невозможен.");
             return false;
         }
-        QStringList subProgr;
-        int size=padsArray->size();
+        QStringList *subProgr;
+        int size = padsArray->size();
 
-        for(int n=0;n!=size;n++){
-            subProgr=padsArray->at(n)->calcGCode(toolDiameter,averageSpeed,moveSpeed,Zoffset);
-            if(subProgr.isEmpty()){
-                lastError=tr("Ошибка при формировании G-кода площадки.");
-                return false;
+        for(int n = 0; n != size; n++){
+            subProgr = padsArray->at(n)->calcGCode(toolDiameter,averageSpeed,moveSpeed,Zoffset);
+            if(subProgr != nullptr){
+                if(!subProgr->isEmpty()){
+                    int subProgSize = subProgr->size();
+                    for(int m = 0; m != subProgSize; m++){
+                        addGCommand(subProgr->at(m));
+                    }
+                    delete subProgr;
+                    return true;
+                }
             }
-            int subProgSize=subProgr.size();
-            for(int m=0;m!=subProgSize;m++){
-                addGCommand(subProgr.at(m));
-            }
+            lastError = tr("Ошибка при формировании G-кода площадки.");
+            return false;
         }
-        return true;
     }
     lastError=tr("Массив аппертур не определен.");
     return false;
