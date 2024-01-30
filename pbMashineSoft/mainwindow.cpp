@@ -14,22 +14,22 @@ MainWindow::MainWindow(QWidget *parent) :
     portName = new QLabel;
     portName->setText(tr("Порт не подключен."));
 
-    statusBar()->addPermanentWidget(portName,1);
-    statusBar()->addPermanentWidget(conIndicator,0);
+    statusBar()->addPermanentWidget(portName, 1);
+    statusBar()->addPermanentWidget(conIndicator, 0);
     statusBar()->setSizeGripEnabled(true);
 
     penDiametersArray.append(1);
 
-    connect(ui->conntcnAction,SIGNAL(triggered(bool)),this,SLOT(connectSlot()));
-    connect(USBPort,SIGNAL(statusSignal(plotterStatus)),this,SLOT(statusSlot(plotterStatus)));
-    connect(USBPort,SIGNAL(disconnectedSignal()),this,SLOT(disconnectedSlot()));
-    connect(USBPort,SIGNAL(messageSignal(QString)),this,SLOT(messageSlot(QString)));
-    connect(ui->DMWidget,SIGNAL(sendGCode(QString)),this,SLOT(sendGCode(QString)));
-    connect(ui->DMWidget,SIGNAL(errorSignal(QString)),this,SLOT(errorSlot(QString)));
-    connect(ui->DMWidget,SIGNAL(sendProgram(QStringList*)),this,SLOT(sendProgrammSlot(QStringList*)));
-    connect(ui->DMWidget,SIGNAL(sendStop()),USBPort,SLOT(sendStopSlot()));
-    connect(ui->dWidget,SIGNAL(openFileSignal(QString)),this,SLOT(openSlot(QString)));
-    connect(ui->dWidget,SIGNAL(messageSignal(QString)),this,SLOT(messageSlot(QString)));
+    connect(ui->conntcnAction, SIGNAL(triggered(bool)), this, SLOT(connectSlot()));
+    connect(USBPort, SIGNAL(statusSignal(plotterStatus)), this, SLOT(statusSlot(plotterStatus)));
+    connect(USBPort, SIGNAL(disconnectedSignal()), this, SLOT(disconnectedSlot()));
+    connect(USBPort, SIGNAL(messageSignal(QString)), this, SLOT(messageSlot(QString)));
+    connect(ui->DMWidget, SIGNAL(sendGCode(QString)), this, SLOT(sendGCode(QString)));
+    connect(ui->DMWidget, SIGNAL(errorSignal(QString)), this, SLOT(errorSlot(QString)));
+    connect(ui->DMWidget, SIGNAL(sendProgram(QStringList*)), this, SLOT(sendProgrammSlot(QStringList*)));
+    connect(ui->DMWidget, SIGNAL(sendStop()), USBPort, SLOT(sendStopSlot()));
+    connect(ui->dWidget, SIGNAL(openFileSignal(QString)), this, SLOT(openSlot(QString)));
+    connect(ui->dWidget, SIGNAL(messageSignal(QString)), this, SLOT(messageSlot(QString)));
     connect(ui->dWidget, SIGNAL(startProgrammSignal(QStringList*)), this, SLOT(sendProgrammSlot(QStringList*)));
 
     distribForms();

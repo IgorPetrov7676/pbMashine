@@ -30,26 +30,26 @@ bool gerberConverter::convertGerberCode(QFile *file){
         return false;
     }
 
-    int size=gerberCode.size();
+    int size = gerberCode.size();
 
     //определяем принадлежность к KiCad
-    for(int n=0;n!=size;n++){
-        QString str=gerberCode.at(n);
-        int index=str.indexOf("TF.");
-        if(index!=-1){
-            if(str.mid(index,35)=="TF.GenerationSoftware,KiCad,Pcbnew,"){
-                KiCadVersion=str.mid(index+35);//и сохраняем версию
+    for(int n = 0; n != size; n++){
+        QString str = gerberCode.at(n);
+        int index = str.indexOf("TF.");
+        if(index != -1){
+            if(str.mid(index, 35) == "TF.GenerationSoftware,KiCad,Pcbnew,"){
+                KiCadVersion = str.mid(index + 35);//и сохраняем версию
                 return parseAsKiCad();
             }
         }
     }
     QMessageBox box;
-    box.setStandardButtons((QMessageBox::Yes)|QMessageBox::No);
-    box.setText(tr("Файл ")+file->fileName()+tr(" не является Gerber файлом KiCad. Попробовать его прочитать \n"
+    box.setStandardButtons((QMessageBox::Yes) | QMessageBox::No);
+    box.setText(tr("Файл ") + file->fileName() + tr(" не является Gerber файлом KiCad. Попробовать его прочитать \n"
                                                  " как Gerber файл?"));
-    box.setWindowTitle(tr("Ошибка чтения ")+file->fileName());
+    box.setWindowTitle(tr("Ошибка чтения ") + file->fileName());
     box.setIcon(QMessageBox::Question);
-    if(box.exec()==QMessageBox::Yes){
+    if(box.exec() == QMessageBox::Yes){
         return parseAsSomethingElse();
     }
     return true;
@@ -58,17 +58,17 @@ bool gerberConverter::convertGerberCode(QFile *file){
 bool gerberConverter::readFile(QFile *file){
     allClear();//очищаем перед чтением файла
 
-    progress->setWindowTitle(tr("Чтение файла ")+file->fileName());
+    progress->setWindowTitle(tr("Чтение файла ") + file->fileName());
     progress->show();
     QTextStream in(file);
-    int bytesPerPercent=file->size()/100;
-    while((!in.atEnd())&&(!stopFlag)){
-        gerberCode.append(in.readLine());
-        progress->setValue(in.pos()/bytesPerPercent);
+    int bytesPerPercent = file->size() / 100;
+    while((!in.atEnd()) && (!stopFlag)){
+        gerberCode.append(in. readLine());
+        progress->setValue(in.pos() / bytesPerPercent);
         QCoreApplication::processEvents();
     }
     if(gerberCode.isEmpty()){
-        lastError=tr("Ошибка чтения файла ")+file->fileName();
+        lastError = tr("Ошибка чтения файла ") + file->fileName();
         progress->close();
         return false;
     }
@@ -258,7 +258,7 @@ bool gerberConverter::makePadsArray(){
         }
         if(string.left(1) == "X"){
             tmpStr=string.mid(string.size()-4,3);
-            if(tmpStr == "D03"){//значит нашли пад
+            if(tmpStr == "D03"){//D03 - перемещение с закрытой шторкой с последующим открытием. значит нашли пад
                 pad *tmpPad = new pad;
                 tmpPad->setApp(findApperture(currApperture));
                 if(!readXCoordinate(string,&tmpFloat)){
@@ -521,7 +521,7 @@ bool gerberConverter::createPadsGCode(){
             return false;
         }
     }
-    lastError=tr("Массив аппертур не определен.");
+    lastError = tr("Массив аппертур не определен.");
     return false;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////

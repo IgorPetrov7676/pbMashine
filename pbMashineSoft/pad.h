@@ -26,6 +26,10 @@ protected:
     QStringList *calcGCodeCycle(float penDiameter, float force, float moveSpeed, float zOffset);
     QStringList *calcGCodeVertOval(float penDiameter, float force, float moveSpeed, float zOffset);
     QStringList *calcGCodeHorOval(float penDiameter, float force, float moveSpeed, float zOffset);
+    QStringList *calcGCodeVertRect(float penDiameter, float force, float moveSpeed, float zOffset);
+    QStringList *calcGCodeHorRect(float penDiameter, float force, float moveSpeed, float zOffset);
+
+
 };
 
 #endif // PAD_H
