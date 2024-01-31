@@ -5,13 +5,12 @@
 #include <QStringList>
 #include <cmath>
 #include "apperture.h"
+#include "mashineObject.h"
 
-
-class pad
+class pad : public mashineObject
 {
 public:
     pad();
-
     void setX(float value);
     void setY(float value);
     void setApp(apperture *value);

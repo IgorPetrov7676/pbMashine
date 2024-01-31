@@ -12,7 +12,8 @@ enum error{
     ERROR_OUT_OF_WORKPLACE_X,
     ERROR_OUT_OF_WORKPLACE_Y,
     ERROR_OUT_OF_WORKPLACE_Z,
-    ERROR_UNKNOW_ERROR
+    ERROR_UNKNOW_ERROR,
+
 };
 
 
@@ -21,6 +22,7 @@ class errorClass
 public:
     errorClass();
     static QString getErrorString(error currentError);
+
 
 };
 

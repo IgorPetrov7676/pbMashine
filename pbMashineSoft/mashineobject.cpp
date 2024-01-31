@@ -2,11 +2,11 @@
 
 mashineObject::mashineObject(QWidget *parent)
 {
-    parentWidget=parent;
+    parentWidget = parent;
 }
 //////////////////////////////////////////////////////////////////////
 QString mashineObject::getLastError(){
-    QString tmp=lastError;
+    QString tmp = lastError;
     lastError.clear();
     return tmp;
 }

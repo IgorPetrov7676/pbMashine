@@ -60,6 +60,7 @@ HEADERS += \
         gerberconverter.h \
         gpath.h \
         mainwindow.h \
+        mashineObject.h \
         mashineobject.h \
         pad.h \
         parsergcode.h \

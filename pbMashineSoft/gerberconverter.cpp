@@ -507,19 +507,17 @@ bool gerberConverter::createPadsGCode(){
 
         for(int n = 0; n != size; n++){
             subProgr = padsArray->at(n)->calcGCode(toolDiameter,averageSpeed,moveSpeed,Zoffset);
-            if(subProgr != nullptr){
-                if(!subProgr->isEmpty()){
-                    int subProgSize = subProgr->size();
-                    for(int m = 0; m != subProgSize; m++){
-                        addGCommand(subProgr->at(m));
-                    }
-                    delete subProgr;
-                    return true;
-                }
+            if(subProgr == nullptr){
+                lastError = padsArray->at(n)->getLastError();
+                return false;
             }
-            lastError = tr("Ошибка при формировании G-кода площадки.");
-            return false;
+            int subProgSize = subProgr->size();
+            for(int m = 0; m != subProgSize; m++){
+                addGCommand(subProgr->at(m));
+            }
+            delete subProgr;
         }
+        return true;
     }
     lastError = tr("Массив аппертур не определен.");
     return false;

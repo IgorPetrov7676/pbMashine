@@ -10,7 +10,7 @@ class mashineObject : public QObject
     Q_OBJECT
 
 public:
-    mashineObject(QWidget *parent);
+    mashineObject(QWidget *parent = nullptr);
     QString getLastError();
 
 

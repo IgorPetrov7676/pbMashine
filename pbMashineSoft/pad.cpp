@@ -1,6 +1,7 @@
 #include "pad.h"
 
-pad::pad()
+pad::pad() :
+    mashineObject()
 {
 
 }
@@ -43,6 +44,7 @@ QStringList *pad::calcGCode(float penDiameter, float force, float moveSpeed, flo
             break;
         }
     }
+    lastError = tr("Неподдерживаемый тип аппертуры.");
     return nullptr;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,11 +216,16 @@ QStringList *pad::calcGCodeHorRect(float penDiameter, float force, float moveSpe
     float penRadius = round((penDiameter / 2) * 10) / 10;
     QStringList *tmpProg = new QStringList();//за удаление отвечает вызывающий
 
-    lines = (app->getYSize() / 2) / penRadius;//количество целых линий по горизонтали
-    //например, если размер Pad-а 2.2мм, а диаметр пера 1мм, то смещение последней линии будет 0.1мм
+    lines = app->getYSize() / penDiameter;//количество целых линий по горизонтали
+    if(lines > 1){//если размер пада меньше диаметра пера
+        delete tmpProg;//расчет невозможен
+        lastError = tr("Горизонтальный размер площадки X = ") + QString::number(this->X) + tr(", Y = ") + QString::number(this->Y) + tr(" меньше диаметра пера.");
+        return nullptr;
+    }
+
     float halfSize = app->getXSize() / 2;
     float offset = 0;
-    tmpProg->append("G00 X" + QString::number(X - halfSize) + " Y" + QString::number(Y) + " F" + QString::number(moveSpeed) + "\n");//смещаем инструмент в позицию - половина размера по вертикали
+    tmpProg->append("G00 X" + QString::number(X - halfSize) + " Y" + QString::number(Y) + " F" + QString::number(moveSpeed) + "\n");//смещаем инструмент в позицию - половина размера по горизонтали
     tmpProg->append("G00 Z" + QString::number(zOffset) + " F" + QString::number(moveSpeed) + "\n");//опускаем в позицию рисования, делаем точку
     tmpProg->append("G91\n");//временно переключаемся на относительные координаты
     tmpProg->append("G01 X" + QString::number(app->getXSize()) + " F" + QString::number(force) + "\n");//рисуем центральную линию с лева на право
@@ -230,6 +237,7 @@ QStringList *pad::calcGCodeHorRect(float penDiameter, float force, float moveSpe
         tmpProg->append("G01 Y" + QString::number(0 - offset) + "\n");//смещение влево на два радиуса
         tmpProg->append("G01 X" + QString::number(app->getXSize()) + "\n");//левая линия движение вверх
         lastLineOffset = (app->getYSize() / 2) - (penRadius * lines);//смещение последней линии
+        //например, если размер Pad-а 2.2мм, а диаметр пера 1мм, то смещение последней линии будет 0.1мм
     }
     if(lastLineOffset != 0){
         tmpProg->append("G01 Y" + QString::number(offset + lastLineOffset) + "\n");//смещение на радиус пера по X
