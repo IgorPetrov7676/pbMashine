@@ -96,8 +96,15 @@ void viewWidget::wheelEvent(QWheelEvent *event){
 ////////////////////////////////////////////////////////////////////////////////
 void viewWidget::mouseMoveEvent(QMouseEvent *event){
     if(event->buttons() == Qt::LeftButton){
-        int x=event->position().x() - mousePosX;
-        int y=event->position().y() - mousePosY;
+
+#if QT_VERSION >= 0x060000
+        int x = event->position().x() - mousePosX;
+        int y = event->position().y() - mousePosY;
+#else
+        int x = event->x() - mousePosX;
+        int y = event->y() - mousePosY;
+#endif
+
         if(x > 0){
             translateX += 5;
         }
@@ -113,8 +120,16 @@ void viewWidget::mouseMoveEvent(QMouseEvent *event){
 
         update();
     }
-    mousePosX=event->position().x();
-    mousePosY=event->position().y();
+
+#if QT_VERSION >= 0x060000
+    mousePosX = event->position().x();
+    mousePosY = event->position().y();
+#else
+    mousePosX = event->x();
+    mousePosY = event->y();
+#endif
+
+
 }
 ///////////////////////////////////////////////////////////////////////////////////
 void viewWidget::mousePressEvent(QMouseEvent *event){

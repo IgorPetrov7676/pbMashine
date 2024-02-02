@@ -58,29 +58,30 @@ float pad::getY() const{
 /////////////////////////////////////////////////////////////////////////////////////////////////
 QStringList *pad::calcGCodeCycle(float penDiameter, float force, float moveSpeed, float zOffset){
     QStringList *tmpProg = new QStringList();//за удаление отвечает вызывающий
+    float padRadius = app->getXSize() / 2;
 
-    int lines=(app->getXSize()/2)/(penDiameter/2);//количество целых линий
-    float lastLineOffset=(app->getXSize()/2)-(penDiameter/2*lines);//смещение последней линии
-    lastLineOffset = round(lastLineOffset * 10) / 10;
+    int lines = padRadius / penDiameter;//количество целых линий
+    float lastLineOffset = padRadius - (penDiameter * lines);//смещение последней линии
     //например, если размер Pad-а 2.2мм, а диаметр пера 1мм, то смещение последней линии будет 0.2мм
+
     tmpProg->append("G00 X"+QString::number(X)+" Y"+QString::number(Y)+" F"+QString::number(moveSpeed) + "\n");//смещаем инструмент в позицию
     tmpProg->append("G00 Z"+QString::number(zOffset)+" F"+QString::number(moveSpeed)+"\n");//опускаем в позицию рисования, делаем точку
-    int n=1;
-    float centerY=0;
-    for(;n!=lines+1;n++){//рисуем концентрические окружности до заполнения PAD-а
-        centerY += penDiameter / 2;//stt
-        tmpProg->append("G01 Y"+QString::number(Y + centerY) + " F" + QString::number(force) + "\n");//смещаем по Y на величину диаметра
+
+    int n = 0;
+    float centerY = 0;
+    for(; n != lines; n++){//рисуем концентрические окружности до заполнения PAD-а
+        centerY += penDiameter / 2;
         tmpProg->append("G91\n");//временно переключаемся на относительные координаты
+        tmpProg->append("G01 Y" + QString::number(centerY) + " F" + QString::number(force) + "\n");//смещаем по Y на величину диаметра
         tmpProg->append("G02 X0 Y0 I0 J" + QString::number(0 - centerY) + "\n");
+    }
+    if(lastLineOffset != 0){
+        tmpProg->append("G01 Y" + QString::number(centerY + lastLineOffset) + "\n");//смещаем по Y на величину диаметра
+        tmpProg->append("G02 X0 Y0 I0 J" + QString::number(0 - (centerY + lastLineOffset)) + "\n");
         tmpProg->append("G90\n");//обратно на абсолютные координаты
     }
-    if(lastLineOffset!=0){
-        tmpProg->append("G01 Y"+QString::number(Y + centerY + lastLineOffset) + "\n");//смещаем по Y на величину диаметра
-        tmpProg->append("G91\n");//временно переключаемся на относительные координаты
-        tmpProg->append("G02 X0 Y0 I0 J" + QString::number(0 - (centerY + lastLineOffset))+"\n");
-        tmpProg->append("G90\n");//обратно на абсолютные координаты
-    }
-    tmpProg->append("G00 Z"+QString::number(0)+" F"+QString::number(moveSpeed)+"\n");
+
+    tmpProg->append("G00 Z" + QString::number(0) + " F" + QString::number(moveSpeed) + "\n");
 
     return tmpProg;
 }

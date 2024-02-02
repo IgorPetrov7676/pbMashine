@@ -158,31 +158,34 @@ void drawCommand::setShine(bool s){
 }
 /////////////////////////////////////////////////////////////////////////////////
 QRect drawCommand::calcArcRect(){
-    float centerX=currentX+I;
-    float centerY=currentY+J;
-    float radius=sqrt((I*I)+(J*J));
-    float ltX=centerX-radius;
-    float ltY=centerY-radius;
-    float wigth=2*radius;
-    float heigth=2*radius;
-    QRect rect(static_cast<int>(round(ltX)),static_cast<int>(round(ltY)),static_cast<int>(round(wigth)),static_cast<int>(round(heigth)));
+    float centerX = currentX + I;
+    float centerY = currentY + J;
+    float radius = sqrt((I * I) + (J * J));
+    float ltX = centerX - radius;
+    float ltY = centerY - radius;
+    float wigth = 2 * radius;
+    float heigth = 2 * radius;
+    QRect rect(static_cast<int>(round(ltX)), static_cast<int>(round(ltY)), static_cast<int>(round(wigth)), static_cast<int>(round(heigth)));
     return rect;
 }
 /////////////////////////////////////////////////////////////////////////////////
 void drawCommand::drawArc(QPainter *painter){
     QRect rect = calcArcRect();
-    QPoint pointStart(currentX, currentY);
-    QPoint center(currentX + I, currentY + J);
-    QPoint pointEnd(currentX + moveX, currentY + moveY);
-    QVector2D vector1(center - pointStart);
-    vector1.normalize();
-    QVector2D vector2(center - pointEnd);
-    vector2.normalize();
-    QVector2D vector3(QPoint(1, 0));//вектор на 3 часа
-    float angle1 = acos(QVector2D::dotProduct(vector1, vector3)) * (180 / 3.141592653589793);
-    float angle2 = acos(QVector2D::dotProduct(vector2, vector3)) * (180 / 3.141592653589793);
-    //if(angle1 == angle2)
-    painter->drawArc(rect,0 - (16 * angle1),16 * (360 - (angle1 - angle2)));
+//    QPoint pointStart(currentX, currentY);
+//    QPoint center(currentX + I, currentY + J);
+//    QPoint pointEnd(currentX + moveX, currentY + moveY);
+//    QVector2D vector1(center - pointStart);
+//    vector1.normalize();
+//    QVector2D vector2(center - pointEnd);
+//    vector2.normalize();
+//    QVector2D vector3(QPoint(1, 0));//вектор на 3 часа
+//    float angle1 = acos(QVector2D::dotProduct(vector1, vector3)) * (180 / 3.141592653589793);
+//    float angle2 = acos(QVector2D::dotProduct(vector2, vector3)) * (180 / 3.141592653589793);
+    //painter->drawArc(rect,0 - (16 * angle1),16 * (360 - (angle1 - angle2)));
+
+    painter->drawArc(rect,(16 * 0),16 * (270));
+
+
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 void drawCommand::checkCommand(){

@@ -18,30 +18,30 @@ bool parserGCode::readProgramm(QString programm){
     int index = 0;
     int pos = 0;
 
-    index=programm.indexOf("\n",pos);
+    index = programm.indexOf("\n",pos);
     while(index != -1){
         drawCommand com;
         com.setPenDiameter(penDiameter);
 #if QT_VERSION > 0x051300
-        QString tmp=programm.sliced(pos,index-pos);
+        QString tmp = programm.sliced(pos, index - pos);
 #else
-        QString tmp=programm.mid(pos,index-pos);
+        QString tmp = programm.mid(pos, index - pos);
 #endif
-        pos=index+1;
-        if(!parseFrame(tmp,&com)){
+        pos = index + 1;
+        if(!parseFrame(tmp, &com)){
             return false;
         }
         drawProgramm->append(com);
-        index=programm.indexOf("\n",pos);
+        index = programm.indexOf("\n", pos);
     }
     return true;
 }
 ///////////////////////////////////////////////////////////////////////////////
 bool parserGCode::isStringCorrect(QString string){
-    int index=string.indexOf("\n",0);
-    if(index!=-1){
+    int index = string.indexOf("\n", 0);
+    if(index != -1){
         drawCommand command;
-        return parseFrame(string,&command);
+        return parseFrame(string, &command);
     }
     return false;
 }
@@ -74,10 +74,10 @@ void parserGCode::shineDrawCommand(int index){
 }
 /////////////////////////////////////////////////////////////////////////////
 bool parserGCode::parseFrame(QString frame, drawCommand *command){
-    int tmp=0;
+    int tmp = 0;
     frame.append(" ");//добавляем в конец пробел для поиска
-    if(frame.left(1)=="N"){// если первый символ N, то читаем номер
-        bool ok=false;
+    if(frame.left(1) == "N"){// если первый символ N, то читаем номер
+        bool ok = false;
         tmp=frame.indexOf(" ");
 #if QT_VERSION > 0x051300
         QString num = frame.sliced(1, tmp);
@@ -89,9 +89,9 @@ bool parserGCode::parseFrame(QString frame, drawCommand *command){
             return false;
         }
         command->setNumber(tmp);
-        frame.remove(0,tmp+1);
+        frame.remove(0, tmp+1);
     }
-    if(frame.left(1)=="M"){
+    if(frame.left(1) == "M"){
 
     }
     else if(frame.left(1)=="G"){
