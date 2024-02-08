@@ -42,13 +42,13 @@ public:
 
 protected:
     commandType type;
-    int currentX;
-    int currentY;
-    int currentZ;
-    int moveX;
-    int moveY;
-    int moveZ;
-    int force;
+    float currentX;
+    float currentY;
+    float currentZ;
+    float moveX;
+    float moveY;
+    float moveZ;
+    float force;
     float I;
     float J;
     float K;

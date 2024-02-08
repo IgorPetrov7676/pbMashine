@@ -68,17 +68,13 @@ void viewWidget::paintEvent(QPaintEvent*){
 //            }
 //        }
 //    }
-    if(graphProgramm!=nullptr){
-        int size=graphProgramm->size();
-        for(int n=0;n!=size;n++){
-            drawCommand com=graphProgramm->at(n);
+    if(graphProgramm != nullptr){
+        int size = graphProgramm->size();
+        for(int n = 0; n != size; n++){
+            drawCommand com = graphProgramm->at(n);
             com.draw(&painter);
         }
     }
-
-
-
-
 }
 ///////////////////////////////////////////////////////////////////////////
 void viewWidget::wheelEvent(QWheelEvent *event){
@@ -120,7 +116,6 @@ void viewWidget::mouseMoveEvent(QMouseEvent *event){
 
         update();
     }
-
 #if QT_VERSION >= 0x060000
     mousePosX = event->position().x();
     mousePosY = event->position().y();
@@ -128,8 +123,6 @@ void viewWidget::mouseMoveEvent(QMouseEvent *event){
     mousePosX = event->x();
     mousePosY = event->y();
 #endif
-
-
 }
 ///////////////////////////////////////////////////////////////////////////////////
 void viewWidget::mousePressEvent(QMouseEvent *event){

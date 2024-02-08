@@ -218,7 +218,7 @@ bool parserGCode::parseParameters(QString frame, drawCommand *command){
             currentZ += tmpFloat;
         }
         else{
-            command->setMoveX(tmpFloat);
+            command->setMoveZ(tmpFloat);
             currentZ = tmpFloat;
         }
         tmp1 ++;

@@ -35,27 +35,24 @@ void drawCommand::setType(const commandType &value){
 }
 /////////////////////////////////////////////////////////////////////////////////
 void drawCommand::setCurrentX(float value){
-    int tmp=static_cast<int>(round(value*10));
     if(!isMX){//если кордината Х перемещения не задана, то она равна начальной позиции. возможно будет задана позже
-        moveX=tmp;
+        moveX = value;
     }
-    currentX = tmp;
+    currentX = value;
 }
 /////////////////////////////////////////////////////////////////////////////////
 void drawCommand::setCurrentY(float value){
-    int tmp=static_cast<int>(round(value*10));
     if(!isMY){//если кордината Y перемещения не задана, то она равна начальной позиции. возможно будет задана позже
-        moveY=tmp;
+        moveY = value;
     }
-    currentY = tmp;
+    currentY = value;
 }
 /////////////////////////////////////////////////////////////////////////////////
 void drawCommand::setCurrentZ(float value){
-    int tmp=static_cast<int>(round(value*10));
     if(!isMZ){//если кордината Z перемещения не задана, то она равна начальной позиции. возможно будет задана позже
-        moveZ=tmp;
+        moveZ = value;
     }
-    currentZ = tmp;
+    currentZ = value;
 }
 ////////////////////////////////////////////////////////////////////////////////
 int drawCommand::getNumber() const{
@@ -67,29 +64,29 @@ float drawCommand::getForce() const{
 }
 /////////////////////////////////////////////////////////////////////////////////
 void drawCommand::setI(float value){
-    I = value*10;
-    isI=true;
-    isR=false;
+    I = value;
+    isI = true;
+    isR = false;
 }
 ///////////////////////////////////////////////////////////////////////////////////
 void drawCommand::setJ(float value){
-    J = value*10;
-    isJ=true;
-    isR=false;
+    J = value;
+    isJ = true;
+    isR = false;
 }
 ///////////////////////////////////////////////////////////////////////////////////
 void drawCommand::setK(float value){
-    K = value*10;
-    isK=true;
-    isR=false;
+    K = value;
+    isK = true;
+    isR = false;
 }
 ///////////////////////////////////////////////////////////////////////////////////
 void drawCommand::setR(float value){
-    R = value*10;
-    isR=true;
-    isI=false;
-    isJ=false;
-    isK=false;
+    R = value;
+    isR = true;
+    isI = false;
+    isJ = false;
+    isK = false;
 }
 /////////////////////////////////////////////////////////////////////////////////
 void drawCommand::draw(QPainter *painter){
@@ -113,13 +110,13 @@ void drawCommand::draw(QPainter *painter){
                 pen.setWidth(penDiameter);
             }
             painter->setPen(pen);
-            painter->drawLine(currentX,currentY,moveX,moveY);
+            painter->drawLine(currentX * 100, currentY * 100, moveX * 100, moveY * 100);
             break;
         }
         case(COMMAND_ARC_RCW):{
             if(shine){
                 pen.setColor(QColor(Qt::red));
-                pen.setWidth(penDiameter*10);
+                pen.setWidth(penDiameter * 4);
             }
             else{
                 pen.setColor(QColor(Qt::black));
@@ -161,66 +158,87 @@ QRect drawCommand::calcArcRect(){
     float centerX = currentX + I;
     float centerY = currentY + J;
     float radius = sqrt((I * I) + (J * J));
+    //левый верхний угол
     float ltX = centerX - radius;
     float ltY = centerY - radius;
+    //ширина, высота
     float wigth = 2 * radius;
     float heigth = 2 * radius;
-    QRect rect(static_cast<int>(round(ltX)), static_cast<int>(round(ltY)), static_cast<int>(round(wigth)), static_cast<int>(round(heigth)));
+    QRect rect(static_cast<int>(round(ltX * 100)), static_cast<int>(round(ltY * 100)), static_cast<int>(round(wigth * 100)), static_cast<int>(round(heigth * 100)));
     return rect;
 }
 /////////////////////////////////////////////////////////////////////////////////
 void drawCommand::drawArc(QPainter *painter){
     QRect rect = calcArcRect();
-//    QPoint pointStart(currentX, currentY);
-//    QPoint center(currentX + I, currentY + J);
-//    QPoint pointEnd(currentX + moveX, currentY + moveY);
-//    QVector2D vector1(center - pointStart);
-//    vector1.normalize();
-//    QVector2D vector2(center - pointEnd);
-//    vector2.normalize();
-//    QVector2D vector3(QPoint(1, 0));//вектор на 3 часа
-//    float angle1 = acos(QVector2D::dotProduct(vector1, vector3)) * (180 / 3.141592653589793);
-//    float angle2 = acos(QVector2D::dotProduct(vector2, vector3)) * (180 / 3.141592653589793);
-    //painter->drawArc(rect,0 - (16 * angle1),16 * (360 - (angle1 - angle2)));
+    QPointF pointStart(currentX, currentY);
+    QPointF center(currentX + I, currentY + J);
+    QPointF pointEnd(currentX, currentY);
+    if(currentX != moveX){
+        pointEnd.setX(moveX);
+    }
+    if(currentY != moveY){
+        pointEnd.setY(moveY);
+    }
+    QVector2D vector1(center - pointStart);
+    vector1.normalize();
+    QVector2D vector2(center - pointEnd);
+    vector2.normalize();
+    QVector2D vector3(QPoint(1, 0));//вектор на 3 часа
+    float angle1 = acos(QVector2D::dotProduct(vector1, vector3)) * (180 / 3.141592653589793);
+    float angle2 = acos(QVector2D::dotProduct(vector2, vector3)) * (180 / 3.141592653589793);
 
-    painter->drawArc(rect,(16 * 0),16 * (270));
+    if(angle1 < angle2){
+        if(this->type == COMMAND_ARC_RCW){
+            angle1 = 0 - angle1;
+            angle2 = 0 - angle2;
+        }
+        painter->drawArc(rect, (16 * angle1), 16 * angle2);
+    }
+    else if(angle1 > angle2){
+        if(this->type == COMMAND_ARC_RCW){
+            angle1 = 0 - angle1;
+            angle2 = 0 - angle2;
+        }
+        painter->drawArc(rect, (16 * angle2), 16 * angle1);
+    }
+    else{
+        painter->drawArc(rect, (16 * angle1), 5760);//если углы равны, то отрисовывается окружность
+    }
 
 
+    //painter->drawArc(rect,(16 * angle1),16 * angle2);//(360 - (angle1 - angle2)));
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 void drawCommand::checkCommand(){
     if(!isMX){//если конечный Х явно не указан, то он равен предыдущему
-        moveX=currentX;
+        moveX = currentX;
     }
     if(!isMY){//если конечный Y явно не указан, то он равен предыдущему
-        moveY=currentY;
+        moveY = currentY;
     }
     if(!isMZ){//если конечный Х явно не указан, то он равен предыдущему
-        moveZ=currentZ;
+        moveZ = currentZ;
     }
 }
 ////////////////////////////////////////////////////////////////////////////////
 void drawCommand::setNumber(int value){
-    isNumber=true;
+    isNumber = true;
     number = value;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void drawCommand::setMoveX(float value){
-    int tmp=static_cast<int>(round(value*10));
-    isMX=true;
-    moveX = tmp;
+    isMX = true;
+    moveX = value;
 }
 ////////////////////////////////////////////////////////////////////////////////
 void drawCommand::setMoveY(float value){
-    int tmp=static_cast<int>(round(value*10));
-    isMY=true;
-    moveY = tmp;
+    isMY = true;
+    moveY = value;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void drawCommand::setMoveZ(float value){
-    int tmp=static_cast<int>(round(value*10));
-    isMZ=true;
-    moveZ = tmp;
+    isMZ = true;
+    moveZ = value;
 }
 /////////////////////////////////////////////////////////////////////////////
 void drawCommand::setForce(float value){
