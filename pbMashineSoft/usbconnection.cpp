@@ -108,8 +108,9 @@ bool usbConnection::isConnected(){
 void usbConnection::runProgram(QStringList *program){
     int size = program->size();
     programPointer = new QStringList();
+    //копирование программы т.к. интерфейс
     for(int n = 0; n != size; n++){
-        programPointer->operator <<(program->at(n));
+        programPointer->operator<<(program->at(n));
     }
     runing = true;
     sendNextComand();

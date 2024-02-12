@@ -6,30 +6,116 @@ viewWidget::viewWidget(QWidget *parent) :
     ui(new Ui::viewWidget)
 {
     ui->setupUi(this);
-    converterPointer=nullptr;
-    scaleX=1;
-    scaleY=1;
-    translateX=0;
-    translateY=0;
-    mousePosX=0;
-    mousePosY=0;
+    converterPointer = nullptr;
+    scaleX = 1;
+    scaleY = 1;
+    translateX = 0;
+    translateY = 0;
+    mousePosX = 0;
+    mousePosY = 0;
+    currentPositionX = 0;
+    currentPositionY = 0;
+    currentPositionZ = 0;
+    relativeCoordinates = 1;//по умолчанию относительные координаты, как в машине
     setMouseTracking(true);
-    graphProgramm=nullptr;
 }
 //////////////////////////////////////////////////////////////////////////////////
 void viewWidget::drawRawData(gerberConverter *converter){
-    converterPointer=converter;
-    update();
-}
-//////////////////////////////////////////////////////////////////////////////////
-void viewWidget::drawProgramm(QVector<drawCommand> *programm){
-    graphProgramm = programm;
+    converterPointer = converter;
     update();
 }
 //////////////////////////////////////////////////////////////////////
 viewWidget::~viewWidget()
 {
     delete ui;
+}
+////////////////////////////////////////////////////////////////////////////////
+bool viewWidget::parseCommand(QString *command){
+//    switch(&command->data()[0]){
+//        case(71):{//команда G
+//            parseGCode(command);
+//            break;
+//        }
+//        case(77):{//команда М
+//            parseMCode(command);
+//            break;
+//        }
+//        default:{
+//            return false;
+//        }
+//    }
+}
+////////////////////////////////////////////////////////////////////////////////
+bool viewWidget::parseGCode(QString *command){
+
+//    //читаем номер команды
+//    int tmp = (int)(array[0]);
+//    if(isdigit(tmp)!=0){//первый символ в массиве должен быть числом. Символ G отстрелили в вызывающей функции
+//        command.GCode = atoi(array);
+//    }
+//    else{//иначе ошибка. todo потом добавить фиксацию ошибки
+//        return;
+//    }
+
+//    //читаем координату Х
+//    int symbol = 'X';
+//    char *pos = strchr(array, symbol);
+//    if(pos != 0){
+//        command.posX = (int)(atof(pos + 1) * 10);
+//        command.reliability |= (1 << 0);
+//    }
+
+//    //читаем координату Y
+//    symbol = 'Y';
+//    pos = strchr(array, symbol);
+//    if(pos != 0){
+//        command.posY = (int)(atof(pos + 1) * 10);
+//        command.reliability |= (1 << 1);
+//    }
+
+//    //читаем координату Z
+//    symbol = 'Z';
+//    pos = strchr(array,symbol);
+//    if(pos != NULL){
+//        command.posZ = (int)(atof(pos + 1) * 10);
+//        command.reliability |= (1 << 2);
+//    }
+
+//    //читаем параметр F
+//    symbol = 'F';
+//    pos = strchr(array,symbol);
+//    if(pos != 0){
+//        command.F = (int)(atof(pos + 1) * 10);
+//        command.reliability |= (1 << 3);
+//    }
+
+//    //читаем параметр R
+//    symbol = 'R';
+//    pos = strchr(array, symbol);
+//    if(pos != 0){
+//        command.R = (int)(atof(pos + 1) * 10);
+//        command.reliability |= (1 << 4);
+//    }
+
+//    //читаем параметр I
+//    symbol = 'I';
+//    pos = strchr(array, symbol);
+//    if(pos != 0){
+//        command.I = (float)(atof(pos + 1) * 10);
+//        command.reliability |= (1 << 5);
+//    }
+
+//    //читаем параметр J
+//    symbol = 'J';
+//    pos = strchr(array, symbol);
+//    if(pos != 0){
+//        command.J = (float)(atof(pos + 1) * 10);
+//        command.reliability |= (1 << 6);
+//    }
+}
+///////////////////////////////////////////////////////////////////////////
+bool viewWidget::parseMCode(QString *command){
+
 }
 ///////////////////////////////////////////////////////////////////////////
 void viewWidget::paintEvent(QPaintEvent*){
@@ -68,13 +154,7 @@ void viewWidget::paintEvent(QPaintEvent*){
 //            }
 //        }
 //    }
-    if(graphProgramm != nullptr){
-        int size = graphProgramm->size();
-        for(int n = 0; n != size; n++){
-            drawCommand com = graphProgramm->at(n);
-            com.draw(&painter);
-        }
-    }
+
 }
 ///////////////////////////////////////////////////////////////////////////
 void viewWidget::wheelEvent(QWheelEvent *event){
@@ -130,9 +210,25 @@ void viewWidget::mousePressEvent(QMouseEvent *event){
 }
 //////////////////////////////////////////////////////////////////////////////////
 void viewWidget::clearAll(){
-    converterPointer=nullptr;
-    scaleX=1;
-    scaleY=1;
-    translateX=0;
-    translateY=0;
+    converterPointer = nullptr;
+    scaleX = 1;
+    scaleY = 1;
+    translateX = 0;
+    translateY = 0;
+}
+//////////////////////////////////////////////////////////////////////////
+void viewWidget::executeNextCommand(QString *command){
+    //парсим команду
+
+
+
+
+}
+//////////////////////////////////////////////////////////////////////////////
+void viewWidget::showDrawing(QStringList *gProgramm){
+    int size = gProgramm->size();
+
+    for(int n = 0; n != size; n++){
+        //executeNextCommand(QString *y);
+    }
 }

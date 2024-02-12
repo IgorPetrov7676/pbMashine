@@ -86,8 +86,10 @@ protected:
     void connectPaths();
     void convertCoordinates();
     void findWorkRect();
-    void allClear();
+    void allClear();//очищает вообще все
+    void clearWorkSpace();//очищает все, кроме G-программы
     void endProgramm();
+
 
 protected slots:
     void processStopSlot();

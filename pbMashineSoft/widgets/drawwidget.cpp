@@ -23,12 +23,10 @@ drawWidget::drawWidget(QWidget *parent) :
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 void drawWidget::setGerberFile(QFile *file){
-    if(!Gconverter->convertGerberCode(file)){
+    if(!Gconverter->convertGerberCode(file)){//преобразование Gerber файла в G-код
         emit messageSignal(Gconverter->getLastError());
     }
     ui->gCodeTextEdit->setPlainText(Gconverter->getGCode());
-    ui->vWidget->drawProgramm(ui->gCodeTextEdit->getPainterProgramm());
-    ui->gCodeTextEdit->parseGCode();
 }
 /////////////////////////////////////////////////////////
 drawWidget::~drawWidget()
@@ -63,13 +61,21 @@ void drawWidget::reParseSlot(){
     }
     else{
         ui->gCodeTextEdit->setPlainText(Gconverter->getGCode());
-        ui->vWidget->drawProgramm(ui->gCodeTextEdit->getPainterProgramm());
-        ui->gCodeTextEdit->parseGCode();
     }
 }
 //////////////////////////////////////////////////////////////////////////////
 void drawWidget::startSlot(){
-    emit startProgrammSignal(Gconverter->getProgramm());
+    if(ui->showRadioButton->isChecked()){
+        if(ui->gCodeTextEdit->getProgramm() != nullptr){
+
+        }
+    }
+    else if(ui->simulateRadioButton->isChecked()){
+
+    }
+    else{
+        emit startProgrammSignal(Gconverter->getProgramm());
+    }
 }
 //////////////////////////////////////////////////////////////////////////////
 void drawWidget::stopSlot(){

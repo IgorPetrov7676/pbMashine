@@ -32,15 +32,6 @@ void gCodeEditWidget::setCurrentString(int number){
         currentString=number;
     }
 }
-///////////////////////////////////////////////////////////////////////////////////////
-bool gCodeEditWidget::parseGCode(){
-    parser.reset();
-    return parser.readProgramm(this->document()->toPlainText());
-}
-///////////////////////////////////////////////////////////////////////////////////
-QVector<drawCommand> *gCodeEditWidget::getPainterProgramm(){
-    return parser.getPainterProgramm();
-}
 /////////////////////////////////////////////////////////////////////////////////////
 void gCodeEditWidget::setPenDiameter(float diameter){
     parser.setPenDiameter(diameter);
@@ -50,6 +41,34 @@ void gCodeEditWidget::reset(){
     this->clear();
     parser.reset();
     currentString = 0;
+}
+////////////////////////////////////////////////////////////////////////////////////
+QStringList *gCodeEditWidget::getProgramm(){
+    if(checkSyntaxis() == true){
+        QStringList *tmpList = new QStringList();//за удаление отвечает вызывающий
+        QString text = this->toPlainText();
+        int lastIndex = 0;
+        int index = 0;
+        do{
+            index = text.indexOf("\n", lastIndex);
+            if(index != -1){
+                QString tmpString = text.mid(lastIndex, index - lastIndex + 1);
+                if( !tmpString.isEmpty()){
+                    tmpList->append(tmpString);
+                    lastIndex = index + 1;
+                }
+            }
+        }while(index != -1);
+        return tmpList;
+    }
+    return nullptr;
+}
+//////////////////////////////////////////////////////////////////////////////////
+bool gCodeEditWidget::checkSyntaxis(){
+    //TODO добавить проверку синтаксиса в окне G кода
+
+
+    return true;
 }
 //////////////////////////////////////////////////////////////////////////////////
 void gCodeEditWidget::textChangedSlot(){

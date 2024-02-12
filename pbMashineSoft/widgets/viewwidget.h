@@ -7,11 +7,12 @@
 #include <QWheelEvent>
 #include <QVector>
 #include "gerberconverter.h"
-#include "drawcommand.h"
+#include "drivercommand.h"
 
 namespace Ui {
 class viewWidget;
 }
+
 
 class viewWidget : public QWidget
 {
@@ -20,15 +21,22 @@ class viewWidget : public QWidget
 public:
     explicit viewWidget(QWidget *parent = nullptr);
     void drawRawData(gerberConverter *converter);
-    void drawProgramm(QVector<drawCommand> *programm);
     void clearAll();
+    void executeNextCommand(QString *command);
+    void showDrawing(QStringList *gProgramm);
     ~viewWidget();
 
 protected:
+    void executeCurrentCommand();
+    bool parseCommand(QString *command);
+    bool parseGCode(QString *command);
+    bool parseMCode(QString *command);
     void paintEvent(QPaintEvent *);
     void wheelEvent(QWheelEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
+
+    driverCommand currentCommand;
 
     gerberConverter *converterPointer;
 
@@ -38,7 +46,10 @@ protected:
     float translateY;
     int mousePosX;
     int mousePosY;
-    QVector<drawCommand> *graphProgramm;
+    float currentPositionX;
+    float currentPositionY;
+    float currentPositionZ;
+    bool relativeCoordinates;
 
 private:
     Ui::viewWidget *ui;

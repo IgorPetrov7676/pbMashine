@@ -11,14 +11,15 @@ class gCodeEditWidget : public QTextEdit
 public:
     gCodeEditWidget(QWidget *parent);
     void setCurrentString(int number);
-    bool parseGCode();
-    QVector<drawCommand> *getPainterProgramm();
     void setPenDiameter(float diameter);
     void reset();
+    QStringList *getProgramm();
 
 protected:
     int currentString;
     parserGCode parser;
+    bool checkSyntaxis();
+
 
 protected slots:
     void cursorPosChangedSlot();

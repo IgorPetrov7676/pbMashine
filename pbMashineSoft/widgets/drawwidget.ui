@@ -109,6 +109,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Пересчитать программу с новыми параметрами.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
     <property name="text">
      <string>Пересчитать</string>
     </property>
@@ -186,9 +189,9 @@
    <property name="geometry">
     <rect>
      <x>990</x>
-     <y>395</y>
+     <y>450</y>
      <width>81</width>
-     <height>65</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
@@ -199,13 +202,64 @@
    <property name="geometry">
     <rect>
      <x>1090</x>
-     <y>395</y>
+     <y>450</y>
      <width>81</width>
-     <height>65</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
     <string>Стоп</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="showRadioButton">
+   <property name="geometry">
+    <rect>
+     <x>1000</x>
+     <y>390</y>
+     <width>82</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Отображение рисунка&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="text">
+    <string>Отобразить</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="simulateRadioButton">
+   <property name="geometry">
+    <rect>
+     <x>1000</x>
+     <y>410</y>
+     <width>82</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Симуляция отрисовки с реальной скоростью интрумента.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="text">
+    <string>Симуляция</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="workRadioButton">
+   <property name="geometry">
+    <rect>
+     <x>1000</x>
+     <y>430</y>
+     <width>82</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Отрисовка на реальном плоттере.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="text">
+    <string>Работа</string>
    </property>
   </widget>
  </widget>

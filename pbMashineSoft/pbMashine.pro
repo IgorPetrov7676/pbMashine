@@ -30,6 +30,7 @@ SOURCES += \
         connectionindicator.cpp \
         drawcommand.cpp \
         drillconverter.cpp \
+        drivercommand.cpp \
         errorclass.cpp \
         gerberconverter.cpp \
         gpath.cpp \
@@ -56,6 +57,7 @@ HEADERS += \
         defines.h \
         drawcommand.h \
         drillconverter.h \
+        drivercommand.h \
         errorclass.h \
         gerberconverter.h \
         gpath.h \

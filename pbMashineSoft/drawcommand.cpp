@@ -9,13 +9,13 @@ drawCommand::drawCommand(){
     moveY=0;
     moveZ=0;
     penDiameter=0;
-    I=0;
+//    I=0;
     J=0;
     K=0;
     R=0;
     number=0;
     multiplier=10;
-    isNumber=false;
+//    isNumber=false;
     isMX=false;
     isMY=false;
     isMZ=false;
@@ -185,28 +185,9 @@ void drawCommand::drawArc(QPainter *painter){
     vector2.normalize();
     QVector2D vector3(QPoint(1, 0));//вектор на 3 часа
     float angle1 = acos(QVector2D::dotProduct(vector1, vector3)) * (180 / 3.141592653589793);
-    float angle2 = acos(QVector2D::dotProduct(vector2, vector3)) * (180 / 3.141592653589793);
+    float angle2 = acos(QVector2D::dotProduct(vector1, vector2)) * (180 / 3.141592653589793);
 
-    if(angle1 < angle2){
-        if(this->type == COMMAND_ARC_RCW){
-            angle1 = 0 - angle1;
-            angle2 = 0 - angle2;
-        }
-        painter->drawArc(rect, (16 * angle1), 16 * angle2);
-    }
-    else if(angle1 > angle2){
-        if(this->type == COMMAND_ARC_RCW){
-            angle1 = 0 - angle1;
-            angle2 = 0 - angle2;
-        }
-        painter->drawArc(rect, (16 * angle2), 16 * angle1);
-    }
-    else{
-        painter->drawArc(rect, (16 * angle1), 5760);//если углы равны, то отрисовывается окружность
-    }
-
-
-    //painter->drawArc(rect,(16 * angle1),16 * angle2);//(360 - (angle1 - angle2)));
+    painter->drawArc(rect, static_cast<int>(16 * angle1), static_cast<int>(16 * angle2));
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 void drawCommand::checkCommand(){
